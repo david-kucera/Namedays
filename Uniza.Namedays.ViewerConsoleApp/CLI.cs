@@ -1,4 +1,6 @@
-﻿namespace Uniza.Namedays.VieverConsoleApp
+﻿using Microsoft.VisualBasic;
+
+namespace Uniza.Namedays.ViewerConsoleApp
 {
     public class CLI
     {
@@ -7,9 +9,9 @@
             Console.WriteLine("KALENDÁR MIEN");
 
             // TODO set right values to dnes, kto, zajtra
-            var dnes = DateTime.Now.Date;
+            var dnes = DateTime.Now;
             var kto = "Emil";
-            Console.WriteLine("Dnes " + dnes + " " + kto);
+            Console.WriteLine("Dnes " + dnes.ToString("dd/MM/yyyy") + " " + kto);
             var zajtra = "Stefan";
             Console.WriteLine("Zajtra má meniny: " + zajtra);
             Console.WriteLine("");
@@ -50,7 +52,6 @@
                     Console.Clear();
                     // TODO implement
                     return 0;
-                    break;
             }
 
             return 0;
