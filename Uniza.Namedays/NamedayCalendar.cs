@@ -1,7 +1,4 @@
-﻿
-using System;
-using System.Collections;
-using System.Globalization;
+﻿using System.Collections;
 using System.Text.RegularExpressions;
 
 namespace Uniza.Namedays
@@ -27,56 +24,60 @@ namespace Uniza.Namedays
 
         private string[] this[DayMonth dayMonth] => 
             (from meno in _calendar 
-            where meno.DayMonth.Day == dayMonth.Day 
-            && meno.DayMonth.Month == dayMonth.Month select meno.Name).ToArray();
+                where meno.DayMonth.Day == dayMonth.Day 
+                    && meno.DayMonth.Month == dayMonth.Month 
+                        select meno.Name).ToArray();
 
-        private string[] this[DateOnly date]
-        {
-            // TODO implement
-            get { throw new NotImplementedException(); }
-        }
+        private string[] this[DateOnly date] =>
+            (from meno in _calendar
+                where meno.DayMonth.Day == date.Day
+                      && meno.DayMonth.Month == date.Month
+                            select meno.Name).ToArray();
 
-        private string[] this[DateTime date]
-        {
-            // TODO implement
-            get { throw new NotImplementedException(); }
-        }
+        private string[] this[DateTime date] =>
+        (from meno in _calendar 
+            where meno.DayMonth.Day == date.Day
+              && meno.DayMonth.Month == date.Month
+                select meno.Name).ToArray();
 
-        private string[] this[int day, int month]
-        {
-            // TODO implement
-            get { throw new NotImplementedException(); }
-        }
-
+        private string[] this[int day, int month] =>
+            (from meno in _calendar 
+                where meno.DayMonth.Day == day
+                      && meno.DayMonth.Month == month
+                        select meno.Name).ToArray();
+    
+        /// <summary>
+        /// Method returns enumerator.
+        /// </summary>
+        /// <returns>Enumerator</returns>
         public IEnumerator<Nameday> GetEnumerator()
         {
             return _calendar.GetEnumerator();
         }
 
         /// <summary>
-        /// metoda vrati vsetky meniny v kalendari
+        /// Method returns all namedays in calendar.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>All Namedays in calendar</returns>
         public IEnumerator<Nameday> GetNamedays()
         {
             return _calendar.GetEnumerator();
         }
 
         /// <summary>
-        /// metoda vrati vsetky meniny v danom mesiaci
+        /// Method returns all namedays in that month.
         /// </summary>
         /// <param name="month"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <returns>All namedays in that month</returns>
         public IEnumerable<Nameday> GetNamedays(int month)
         {
             return from nameday in _calendar where nameday.DayMonth.Month == month select nameday;
         }
 
         /// <summary>
-        /// metóda vráti všetky meniny, ktoré zodpovedajú zadanému reťazcu regulárneho výrazu (pattern), ktorý sa bude aplikovať na mená v kalendári.
+        /// Method returns all namedays mathing the input pattern.
         /// </summary>
-        /// <param name="pattern"></param>
+        /// <param name="pattern">Pattern of which will be implemented</param>
         /// <returns></returns>
         public IEnumerable<Nameday> GetNamedays(string pattern)
         {
@@ -84,20 +85,20 @@ namespace Uniza.Namedays
         }
 
         /// <summary>
-        /// metóda pridá meniny do kalendára.
+        /// Method adds nameday to calendar.
         /// </summary>
-        /// <param name="nameday"></param>
+        /// <param name="nameday">Nameday of celebration</param>
         public void Add(Nameday nameday)
         {
             _calendar.Add(nameday);
         }
 
         /// <summary>
-        /// metóda pridá jedno alebo viacero mien so zadaným dňom a mesiacom oslavy do kalendára.
+        /// Method adds one, or more names with given day and month to calendar.
         /// </summary>
-        /// <param name="day">Den oslavy</param>
-        /// <param name="month">Mesiac oslavy</param>
-        /// <param name="names">Mena oslavencov</param>
+        /// <param name="day">Day of celebration</param>
+        /// <param name="month">Month of celebration</param>
+        /// <param name="names">Names of celebrators</param>
         public void Add(int day, int month, params string[] names)
         {
             foreach (var name in names)
@@ -109,10 +110,10 @@ namespace Uniza.Namedays
         }
 
         /// <summary>
-        /// metóda pridá jedno alebo viacero mien so zadaným dňom a mesiacom oslavy do kalendára.
+        /// Method adds one or more names with given day and month to calendar.
         /// </summary>
-        /// <param name="dayMonth">Den oslavy ako dayMonth strukctura</param>
-        /// <param name="names">Mena oslavencov</param>
+        /// <param name="dayMonth">Day of celebration</param>
+        /// <param name="names">Names of celebrators</param>
         public void Add(DayMonth dayMonth, params string[] names)
         {
             foreach (var name in names)
@@ -123,10 +124,10 @@ namespace Uniza.Namedays
         }
 
         /// <summary>
-        /// metóda odstráni meno z kalendára mien. Ak ho nájde a odstráni, vráti hodnotu true. Ak ho nenájde, nevyhodí žiadnu výnimku, ale vráti hodnotu false.
+        /// Method removes given name from calendar, if found - returns true. If not found, returns false.
         /// </summary>
-        /// <param name="name">Meno na vyhodenie</param>
-        /// <returns></returns>
+        /// <param name="name">Name to be removed</param>
+        /// <returns>True, if successfully removed</returns>
         public bool Remove(string name)
         {
             if (Contains(name))
@@ -138,10 +139,10 @@ namespace Uniza.Namedays
         }
 
         /// <summary>
-        /// metóda vráti true, ak zadané meno v kalendári existuje. Ak neexistuje, vráti hodnotu false.
+        /// Method returns true, if given name is already in the calendar. If it does not, returns false.
         /// </summary>
-        /// <param name="name">Meno hladaneho</param>
-        /// <returns></returns>
+        /// <param name="name">Name to be found</param>
+        /// <returns>True, if found.</returns>
         public bool Contains(string name)
         {
             GetEnumerator().Reset();
@@ -156,9 +157,8 @@ namespace Uniza.Namedays
         }
 
         /// <summary>
-        /// metóda vymaže všetky údaje z kalendára.
+        /// Method clears all data from calendar.
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
         public void Clear()
         {
             _calendar.Clear();
