@@ -5,7 +5,7 @@
     /// </summary>
     public record struct DayMonth
     {
-        private int Day { get; init; }
+        public int Day { get; init; }
         public int Month { get; init; }
 
         /// <summary>

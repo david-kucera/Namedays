@@ -11,22 +11,18 @@ namespace Uniza.Namedays
     /// </summary>
     public record struct Nameday
     {
-        private string Name { get; init; }
-        private DayMonth DayMonth { get; init; }
+        public string Name { get; init; }
+        public DayMonth DayMonth { get; init; }
 
         /// <summary>
-        /// Non parametrized constructor, sets Name to empty string and DayMonth to actual day.
+        /// Non parametrized constructor.
         /// </summary>
-        public Nameday()
-        {
-            Name = string.Empty;
-            DayMonth = new DayMonth();
-        }
+        public Nameday() { }
 
         /// <summary>
         /// Parametrized constructor, sets values according to the parametres.
         /// </summary>
-        /// <param name="name">name of celebrator.</param>
+        /// <param name="name">Name of celebrator.</param>
         /// <param name="dayMonth">DayMonth of celebration.</param>
         public Nameday(string name, DayMonth dayMonth)
         {
