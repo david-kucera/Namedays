@@ -6,12 +6,12 @@ namespace Uniza.Namedays
 {
     public record NamedayCalendar : IEnumerable<Nameday>
     {
-        private int NameCount { get; }
-        private int DayCount { get; }
+        public int NameCount { get; }
+        public int DayCount { get; }
 
         private List<Nameday> _calendar = new List<Nameday>();
 
-        private DayMonth? this[string name]
+        public DayMonth? this[string name]
         {
             get
             {
@@ -23,25 +23,25 @@ namespace Uniza.Namedays
             }
         }
 
-        private string[] this[DayMonth dayMonth] => 
+        public string[] this[DayMonth dayMonth] => 
             (from meno in _calendar 
                 where meno.DayMonth.Day == dayMonth.Day 
                     && meno.DayMonth.Month == dayMonth.Month 
                         select meno.Name).ToArray();
 
-        private string[] this[DateOnly date] =>
+        public string[] this[DateOnly date] =>
             (from meno in _calendar
                 where meno.DayMonth.Day == date.Day
                       && meno.DayMonth.Month == date.Month
                             select meno.Name).ToArray();
 
-        private string[] this[DateTime date] =>
+        public string[] this[DateTime date] =>
         (from meno in _calendar 
             where meno.DayMonth.Day == date.Day
               && meno.DayMonth.Month == date.Month
                 select meno.Name).ToArray();
 
-        private string[] this[int day, int month] =>
+        public string[] this[int day, int month] =>
             (from meno in _calendar 
                 where meno.DayMonth.Day == day
                       && meno.DayMonth.Month == month

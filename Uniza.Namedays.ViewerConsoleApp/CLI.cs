@@ -4,14 +4,25 @@
     {
         public static int Main()
         {
-            NamedayCalendar calendar = new NamedayCalendar();
+
+            NamedayCalendar calendar = new();
+            FileInfo vv = new FileInfo("names.csv");
+            calendar.Load(vv);
+
             Console.WriteLine("KALENDÁR MIEN");
-            // TODO set right values to dnes, kto, zajtra
-            var dnes = DateTime.Now;
-            var kto = "Emil";
-            Console.WriteLine("Dnes " + dnes.ToString("dd/MM/yyyy") + " " + kto);
-            var zajtra = "Stefan";
-            Console.WriteLine("Zajtra má meniny: " + zajtra);
+
+            var kto = "";
+            try
+            {
+                kto = calendar[DateTime.Now.Day, DateTime.Now.Month][0];
+            }
+            catch (Exception e)
+            {
+                kto = "nemá nikto meniny.";
+            }
+            
+            Console.WriteLine("Dnes " + DateTime.Now.ToString("dd/MM/yyyy") + " " + kto);
+            Console.WriteLine("Zajtra má meniny: " + calendar[DateTime.Now.AddDays(1).Day, DateTime.Now.AddDays(1).Month][0]);
             Console.WriteLine("");
 
             Console.WriteLine("Menu");
