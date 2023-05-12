@@ -191,16 +191,16 @@ namespace Uniza.Namedays.ViewerConsoleApp
 
                 case ConsoleKey.NumPad5:
                     Console.Clear();
-
                     var aktual = DateTime.Now;
                     var mesiace = new string[] { "január", "február", "marec", "apríl", "máj", "jún", "júl", "august", "september", "október", "november", "december" };
 
                     while (true)
                     {
+                        Console.Clear();
                         Console.WriteLine("KALENDÁR MENÍN");
                         Console.WriteLine(mesiace[aktual.Month] + " " + aktual.Year + ":");
 
-                        for (int i = 1; i <= 31; i++)
+                        for (int i = 1; i <= DateTime.DaysInMonth(aktual.Year, aktual.Month); i++)
                         {
                             var date = new DateTime(aktual.Year, aktual.Month, i);
                             if (date.Month == DateTime.Now.Month && date.Day == DateTime.Now.Day)
@@ -238,26 +238,32 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         Console.WriteLine("Kláves Home alebo D - aktuálny deň.");
                         Console.WriteLine("Pre ukončenie stlačte Enter.");
                         var input = Console.ReadKey();
-                        switch (input.Key)
+
+                        if (input.Key.Equals(ConsoleKey.Enter))
                         {
-                            case ConsoleKey.Escape:
-                                break;
-                            case ConsoleKey.UpArrow:
-                                // TODO rok dopredu
-                                break;
-                            case ConsoleKey.DownArrow:
-                                // TODO rok dozadu
-                                break;
-                            case ConsoleKey.LeftArrow:
-                                // TODO mesiac dozadu
-                                break;
-                            case ConsoleKey.RightArrow:
-                                // TODO mesiac dopredu
-                                break;
+                            break;
+                        }
+                        if (input.Key.Equals(ConsoleKey.UpArrow))
+                        {
+                            aktual = aktual.AddYears(1);
+                        }
+                        if (input.Key.Equals(ConsoleKey.DownArrow))
+                        {
+                            aktual = aktual.AddYears(-1);
+                        }
+                        if (input.Key.Equals(ConsoleKey.LeftArrow))
+                        {
+                            aktual = aktual.AddMonths(-1);
+                        }
+                        if (input.Key.Equals(ConsoleKey.RightArrow))
+                        {
+                            aktual = aktual.AddMonths(1);
+                        }
+                        if (input.Key.Equals(ConsoleKey.Home) || input.Key.Equals(ConsoleKey.H))
+                        {
+                            aktual = DateTime.Now;
                         }
                     }
-
-
                     // TODO navrat na menu
                     break;
 
