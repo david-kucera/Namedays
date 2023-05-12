@@ -84,8 +84,8 @@ namespace Uniza.Namedays.ViewerConsoleApp
                     Console.WriteLine("Celkový počet mien v kalendári: " + calendar.NameCount);
                     Console.WriteLine("Celkový počet dní obsahujúcich mená v kalendári: " + calendar.DayCount);
                     Console.WriteLine("Celkový počet mien v jednotlivých mesiacoch: ");
-                    var months = new string[] { "január", "február", "marec", "apríl", "máj", "jún", "júl", "august", "september", "november", "december"};
-                    for (int i = 0; i <= months.Length; i++)
+                    var months = new string[] { "január", "február", "marec", "apríl", "máj", "jún", "júl", "august", "september", "október", "november", "december"};
+                    for (int i = 0; i < months.Length; i++)
                     {
                         var count = calendar.GetNamedays(i + 1);
                         Console.Write(months[i] + ": " + count.Count() + "\n");
