@@ -17,7 +17,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
             {
                 Console.Clear();
                 Console.WriteLine("KALENDÁR MIEN");
-                var kto = "";
+                string kto;
                 try
                 {
                     kto = calendar[DateTime.Now.Day, DateTime.Now.Month][0];
@@ -47,8 +47,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         Console.Clear();
                         Console.WriteLine("OTVORENIE");
                         Console.WriteLine("Zadajte cestu k súboru kalendára mien alebo stlačte Enter pre ukončenie.");
-                        var input_je_zly = true;
-                        while (input_je_zly)
+                        while (true)
                         {
                             Console.WriteLine("Zadajte cestu k CSV súboru: ");
                             var input = Console.ReadLine();
@@ -57,8 +56,8 @@ namespace Uniza.Namedays.ViewerConsoleApp
                                 Environment.Exit(0);
                             }
 
-                            var index_dot = input.IndexOf('.');
-                            var type = input.Substring(index_dot, 4);
+                            var indexDot = input!.IndexOf('.');
+                            var type = input.Substring(indexDot, 4);
 
                             if (type != ".csv")
                             {
@@ -76,9 +75,9 @@ namespace Uniza.Namedays.ViewerConsoleApp
 
                             calendar.Load(info);
                             Console.WriteLine("Súbor kalendára bol načítaný.");
-                            input_je_zly = false;
                             Console.WriteLine("Pre pokračovanie stlačte Enter.");
                             Console.ReadKey();
+                            break;
                         }
                         continue;
 
@@ -89,7 +88,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         Console.WriteLine("Celkový počet dní obsahujúcich mená v kalendári: " + calendar.DayCount);
                         Console.WriteLine("Celkový počet mien v jednotlivých mesiacoch: ");
                         var months = new string[] { "január", "február", "marec", "apríl", "máj", "jún", "júl", "august", "september", "október", "november", "december" };
-                        for (int i = 0; i < months.Length; i++)
+                        for (var i = 0; i < months.Length; i++)
                         {
                             var count = calendar.GetNamedays(i + 1);
                             Console.Write(" " + months[i] + ": " + count.Count() + "\n");
@@ -98,14 +97,14 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         Console.WriteLine("Počet mien podľa začiatočných písmen: ");
                         var pismena = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "Ľ", "M", "N", "O", "P", "R", "S", "Š", "T", "U", "V", "X", "Z", "Ž" };
                         // TODO does not work with slovak diacritis
-                        for (int i = 0; i < pismena.Length; i++)
+                        for (var i = 0; i < pismena.Length; i++)
                         {
                             var count = calendar.GetNamedays(pismena[i]);
                             Console.Write(" " + pismena[i] + ": " + count.Count() + "\n");
                         }
 
                         Console.WriteLine("Počet mien podľa dĺžky znakov:");
-                        for (int i = 0; i < 12; i++)
+                        for (var i = 0; i < 12; i++)
                         {
                             var count = calendar.GetNamedays(i, true);
                             // TODO does not show appropriate number, probably because of encoding of csv file
@@ -178,7 +177,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                                 continue;
                             }
 
-                            int i = 1;
+                            var i = 1;
                             foreach (var name in names)
                             {
                                 Console.WriteLine(i + ". " + name);
@@ -197,7 +196,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                             Console.WriteLine("KALENDÁR MENÍN");
                             Console.WriteLine(aktual.ToString("MMM") + " " + aktual.Year + ":");
 
-                            for (int i = 1; i <= DateTime.DaysInMonth(aktual.Year, aktual.Month); i++)
+                            for (var i = 1; i <= DateTime.DaysInMonth(aktual.Year, aktual.Month); i++)
                             {
                                 var date = new DateTime(aktual.Year, aktual.Month, i);
                                 if (date.Month == DateTime.Now.Month && date.Day == DateTime.Now.Day)
@@ -218,7 +217,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                                 else
                                 {
                                     output += names[0];
-                                    for (int j = 1; j < names.Length; j++)
+                                    for (var j = 1; j < names.Length; j++)
                                     {
                                         output += ", ";
                                         output += names[j];
