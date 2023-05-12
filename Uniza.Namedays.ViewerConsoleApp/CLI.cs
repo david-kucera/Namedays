@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Xml.Linq;
 
 namespace Uniza.Namedays.ViewerConsoleApp
 {
@@ -12,13 +14,12 @@ namespace Uniza.Namedays.ViewerConsoleApp
             calendar.Load(def);
 
             Console.WriteLine("KALENDÁR MIEN");
-
             var kto = "";
             try
             {
                 kto = calendar[DateTime.Now.Day, DateTime.Now.Month][0];
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 kto = "nemá nikto meniny.";
             }
@@ -185,12 +186,81 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         }
                     }
 
-                    // TODO implement
+                    // TODO navrat na menu
                     break;
+
                 case ConsoleKey.NumPad5:
                     Console.Clear();
-                    // TODO implement
+
+                    var aktual = DateTime.Now;
+                    var mesiace = new string[] { "január", "február", "marec", "apríl", "máj", "jún", "júl", "august", "september", "október", "november", "december" };
+
+                    while (true)
+                    {
+                        Console.WriteLine("KALENDÁR MENÍN");
+                        Console.WriteLine(mesiace[aktual.Month] + " " + aktual.Year + ":");
+
+                        for (int i = 1; i <= 31; i++)
+                        {
+                            var date = new DateTime(aktual.Year, aktual.Month, i);
+                            if (date.Month == DateTime.Now.Month && date.Day == DateTime.Now.Day)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                            }
+
+                            if (date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                            }
+                            var names = calendar[date];
+                            var output = "";
+                            if (names.Length == 0)
+                            {
+                                output = "";
+                            }
+                            else
+                            {
+                                output += names[0];
+                                for (int j = 1; j < names.Length; j++)
+                                {
+                                    output += ", ";
+                                    output += names[j];
+                                }
+                            }
+                            Console.WriteLine(" " + date.Day + "." + date.Month + " " +
+                                              new DateTime(aktual.Year, date.Month, date.Day)
+                                                  .ToString("ddd", new CultureInfo("sk-SK")) + " " + output);
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        Console.WriteLine();
+                        Console.WriteLine("Šípka doľava / doprava - mesiac dozadu / dopredu.");
+                        Console.WriteLine("Šípka dole / hore - rok dozadu / dopredu.");
+                        Console.WriteLine("Kláves Home alebo D - aktuálny deň.");
+                        Console.WriteLine("Pre ukončenie stlačte Enter.");
+                        var input = Console.ReadKey();
+                        switch (input.Key)
+                        {
+                            case ConsoleKey.Escape:
+                                break;
+                            case ConsoleKey.UpArrow:
+                                // TODO rok dopredu
+                                break;
+                            case ConsoleKey.DownArrow:
+                                // TODO rok dozadu
+                                break;
+                            case ConsoleKey.LeftArrow:
+                                // TODO mesiac dozadu
+                                break;
+                            case ConsoleKey.RightArrow:
+                                // TODO mesiac dopredu
+                                break;
+                        }
+                    }
+
+
+                    // TODO navrat na menu
                     break;
+
                 case ConsoleKey.NumPad6:
                     Console.Clear();
                     Environment.Exit(0);
