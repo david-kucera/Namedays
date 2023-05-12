@@ -13,268 +13,267 @@ namespace Uniza.Namedays.ViewerConsoleApp
             FileInfo def = new FileInfo(args[0]);
             calendar.Load(def);
 
-            Console.WriteLine("KALENDÁR MIEN");
-            var kto = "";
-            try
+            while (true)
             {
-                kto = calendar[DateTime.Now.Day, DateTime.Now.Month][0];
-            }
-            catch (Exception)
-            {
-                kto = "nemá nikto meniny.";
-            }
-            
-            Console.WriteLine("Dnes " + DateTime.Now.ToString("dd/MM/yyyy") + " " + kto);
-            Console.WriteLine("Zajtra má meniny: " + calendar[DateTime.Now.AddDays(1).Day, DateTime.Now.AddDays(1).Month][0]);
-            Console.WriteLine("");
+                Console.Clear();
+                Console.WriteLine("KALENDÁR MIEN");
+                var kto = "";
+                try
+                {
+                    kto = calendar[DateTime.Now.Day, DateTime.Now.Month][0];
+                }
+                catch (Exception)
+                {
+                    kto = "nemá nikto meniny.";
+                }
 
-            Console.WriteLine("Menu");
-            Console.WriteLine("1 - načítať kalendár");
-            Console.WriteLine("2 - zobraziť štatistiku");
-            Console.WriteLine("3 - vyhľadať mená");
-            Console.WriteLine("4 - vyhľadať mená podľa dátumu");
-            Console.WriteLine("5 - zobraziť kalendár mien v mesiaci");
-            Console.WriteLine("6 | Escape - koniec");
-            Console.Write("Vaša voľba ");
-            var volba = Console.ReadKey();
+                Console.WriteLine("Dnes " + DateTime.Now.ToString("dd/MM/yyyy") + " " + kto);
+                Console.WriteLine("Zajtra má meniny: " + calendar[DateTime.Now.AddDays(1).Day, DateTime.Now.AddDays(1).Month][0]);
+                Console.WriteLine("");
 
-            switch (volba.Key)
-            {
-                case ConsoleKey.NumPad1:
-                    Console.Clear();
-                    Console.WriteLine("OTVORENIE");
-                    Console.WriteLine("Zadajte cestu k súboru kalendára mien alebo stlačte Enter pre ukončenie.");
-                    var input_je_zly = true;
-                    while (input_je_zly)
-                    {
-                        Console.WriteLine("Zadajte cestu k CSV súboru: ");
-                        var input = Console.ReadLine();
-                        if (input == "")
-                        {
-                            Environment.Exit(0);
-                        }
+                Console.WriteLine("Menu");
+                Console.WriteLine("1 - načítať kalendár");
+                Console.WriteLine("2 - zobraziť štatistiku");
+                Console.WriteLine("3 - vyhľadať mená");
+                Console.WriteLine("4 - vyhľadať mená podľa dátumu");
+                Console.WriteLine("5 - zobraziť kalendár mien v mesiaci");
+                Console.WriteLine("6 | Escape - koniec");
+                Console.Write("Vaša voľba ");
+                var volba = Console.ReadKey();
 
-                        var index_dot = input.IndexOf('.');
-                        var type = input.Substring(index_dot, 4);
-
-                        if (type != ".csv")
-                        {
-                            Console.WriteLine("Zadaný súbor " + input + " nie je typu CSV!");
-                            continue;
-                        }
-
-                        FileInfo info = new(input);
-
-                        if (!info.Exists)
-                        {
-                            Console.WriteLine("Zadaný súbor " + input + " neexistuje!");
-                            continue;
-                        }
-
-                        calendar.Load(info);
-                        Console.WriteLine("Súbor kalendára bol načítaný.");
-                        input_je_zly = false;
-                        Console.WriteLine("Pre pokračovanie stlačte Enter.");
-                        Console.ReadKey();
-                    }
-                    // TODO navrat na menu
-                    break;
-
-                case ConsoleKey.NumPad2:
-                    Console.Clear();
-                    Console.WriteLine("ŠTATISTIKA");
-                    Console.WriteLine("Celkový počet mien v kalendári: " + calendar.NameCount);
-                    Console.WriteLine("Celkový počet dní obsahujúcich mená v kalendári: " + calendar.DayCount);
-                    Console.WriteLine("Celkový počet mien v jednotlivých mesiacoch: ");
-                    var months = new string[] { "január", "február", "marec", "apríl", "máj", "jún", "júl", "august", "september", "október", "november", "december"};
-                    for (int i = 0; i < months.Length; i++)
-                    {
-                        var count = calendar.GetNamedays(i + 1);
-                        Console.Write(months[i] + ": " + count.Count() + "\n");
-                    }
-
-                    Console.WriteLine("Počet mien podľa začiatočných písmen: ");
-                    var pismena = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "Ľ", "M", "N", "O", "P", "R", "S", "Š", "T", "U", "V", "X", "Z", "Ž"};
-                    // TODO does not work with slovak diacritis
-                    for (int i = 0; i < pismena.Length; i++)
-                    {
-                        var count = calendar.GetNamedays(pismena[i]);
-                        Console.Write(pismena[i] + ": " + count.Count() + "\n");
-                    }
-
-                    Console.WriteLine("Počet mien podľa dĺžky znakov:");
-                    for (int i = 0; i < 12; i++)
-                    {
-                        var count = calendar.GetNamedays(i, true);
-                        // TODO does not show appropriate number, probably because of encoding of csv file
-                        if (count.Count() == 0)
-                        {
-                            continue;
-                        }
-
-                        Console.WriteLine(i + ": " + count.Count());
-                    }
-
-                    Console.WriteLine("Pre skončenie stlačte Enter.");
-                    Console.ReadKey();
-                    // TODO navrat na menu
-                    break;
-
-                case ConsoleKey.NumPad3:
-                    Console.Clear();
-
-                    Console.WriteLine("VYHĽADÁVANIE MIEN");
-                    Console.WriteLine("Pre ukončenie stlačte Enter.");
-
-                    while (true)
-                    {
-                        Console.Write("Zadajte meno (regulárny výraz): ");
-                        var input = Console.ReadLine();
-                        if (input == "")
-                        {
-                            break;
-                        }
-
-                        var count = calendar.GetNamedays(input);
-
-                        if (count.Count() == 0)
-                        {
-                            Console.WriteLine("Neboli nájdené žiadne mená.");
-                            continue;
-                        }
-                        // TODO does not work .. does not show any names
-                        for (int i = 1; i <= count.Count(); i++)
-                        {
-                            var meno = count.GetEnumerator().Current;
-                            Console.Write(i + ". " + meno.Name + "(" + meno.DayMonth + ")\n");
-                            count.GetEnumerator().MoveNext();
-                        }
-                    }
-
-                    // TODO navrat na menu
-                    break;
-                case ConsoleKey.NumPad4:
-                    Console.Clear();
-                    Console.WriteLine("VYHĽADÁVANIE MIEN PODĽA DÁTUMU");
-                    Console.WriteLine("Pre ukončenie stlačte Enter.");
-
-                    while (true)
-                    {
-                        Console.Write("Zadajte deň a mesiac: ");
-                        var input = Console.ReadLine();
-                        if (input == "")
-                        {
-                            break;
-                        }
-
-                        var data = input.Split(".");
-                        var day = int.Parse(data[0]);
-                        var month = int.Parse(data[1]);
-                        var names = calendar[day, month];
-
-                        if (names.Length == 0)
-                        {
-                            Console.WriteLine("Neboli nájdené žiadne mená.");
-                            continue;
-                        }
-
-                        int i = 1;
-                        foreach (var name in names)
-                        {
-                            Console.WriteLine(i + ". " + name);
-                            i++;
-                        }
-                    }
-
-                    // TODO navrat na menu
-                    break;
-
-                case ConsoleKey.NumPad5:
-                    Console.Clear();
-                    var aktual = DateTime.Now;
-                    var mesiace = new string[] { "január", "február", "marec", "apríl", "máj", "jún", "júl", "august", "september", "október", "november", "december" };
-
-                    while (true)
-                    {
+                switch (volba.Key)
+                {
+                    case ConsoleKey.NumPad1:
                         Console.Clear();
-                        Console.WriteLine("KALENDÁR MENÍN");
-                        Console.WriteLine(mesiace[aktual.Month] + " " + aktual.Year + ":");
-
-                        for (int i = 1; i <= DateTime.DaysInMonth(aktual.Year, aktual.Month); i++)
+                        Console.WriteLine("OTVORENIE");
+                        Console.WriteLine("Zadajte cestu k súboru kalendára mien alebo stlačte Enter pre ukončenie.");
+                        var input_je_zly = true;
+                        while (input_je_zly)
                         {
-                            var date = new DateTime(aktual.Year, aktual.Month, i);
-                            if (date.Month == DateTime.Now.Month && date.Day == DateTime.Now.Day)
+                            Console.WriteLine("Zadajte cestu k CSV súboru: ");
+                            var input = Console.ReadLine();
+                            if (input == "")
                             {
-                                Console.ForegroundColor = ConsoleColor.Green;
+                                Environment.Exit(0);
                             }
 
-                            if (date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+                            var index_dot = input.IndexOf('.');
+                            var type = input.Substring(index_dot, 4);
+
+                            if (type != ".csv")
                             {
-                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Zadaný súbor " + input + " nie je typu CSV!");
+                                continue;
                             }
-                            var names = calendar[date];
-                            var output = "";
+
+                            FileInfo info = new(input);
+
+                            if (!info.Exists)
+                            {
+                                Console.WriteLine("Zadaný súbor " + input + " neexistuje!");
+                                continue;
+                            }
+
+                            calendar.Load(info);
+                            Console.WriteLine("Súbor kalendára bol načítaný.");
+                            input_je_zly = false;
+                            Console.WriteLine("Pre pokračovanie stlačte Enter.");
+                            Console.ReadKey();
+                        }
+                        continue;
+
+                    case ConsoleKey.NumPad2:
+                        Console.Clear();
+                        Console.WriteLine("ŠTATISTIKA");
+                        Console.WriteLine("Celkový počet mien v kalendári: " + calendar.NameCount);
+                        Console.WriteLine("Celkový počet dní obsahujúcich mená v kalendári: " + calendar.DayCount);
+                        Console.WriteLine("Celkový počet mien v jednotlivých mesiacoch: ");
+                        var months = new string[] { "január", "február", "marec", "apríl", "máj", "jún", "júl", "august", "september", "október", "november", "december" };
+                        for (int i = 0; i < months.Length; i++)
+                        {
+                            var count = calendar.GetNamedays(i + 1);
+                            Console.Write(" " + months[i] + ": " + count.Count() + "\n");
+                        }
+
+                        Console.WriteLine("Počet mien podľa začiatočných písmen: ");
+                        var pismena = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "Ľ", "M", "N", "O", "P", "R", "S", "Š", "T", "U", "V", "X", "Z", "Ž" };
+                        // TODO does not work with slovak diacritis
+                        for (int i = 0; i < pismena.Length; i++)
+                        {
+                            var count = calendar.GetNamedays(pismena[i]);
+                            Console.Write(" " + pismena[i] + ": " + count.Count() + "\n");
+                        }
+
+                        Console.WriteLine("Počet mien podľa dĺžky znakov:");
+                        for (int i = 0; i < 12; i++)
+                        {
+                            var count = calendar.GetNamedays(i, true);
+                            // TODO does not show appropriate number, probably because of encoding of csv file
+                            if (count.Count() == 0)
+                            {
+                                continue;
+                            }
+
+                            Console.WriteLine(" " + i + ": " + count.Count());
+                        }
+
+                        Console.WriteLine("Pre skončenie stlačte Enter.");
+                        Console.ReadKey();
+                        continue;
+
+                    case ConsoleKey.NumPad3:
+                        Console.Clear();
+
+                        Console.WriteLine("VYHĽADÁVANIE MIEN");
+                        Console.WriteLine("Pre ukončenie stlačte Enter.");
+
+                        while (true)
+                        {
+                            Console.Write("Zadajte meno (regulárny výraz): ");
+                            var input = Console.ReadLine();
+                            if (input == "")
+                            {
+                                break;
+                            }
+
+                            var count = calendar.GetNamedays(input);
+
+                            if (count.Count() == 0)
+                            {
+                                Console.WriteLine("Neboli nájdené žiadne mená.");
+                                continue;
+                            }
+                            // TODO does not work .. does not show any names
+                            for (int i = 1; i <= count.Count(); i++)
+                            {
+                                var meno = count.GetEnumerator().Current;
+                                Console.Write(i + ". " + meno.Name + "(" + meno.DayMonth + ")\n");
+                                count.GetEnumerator().MoveNext();
+                            }
+                        }
+                        continue;
+
+                    case ConsoleKey.NumPad4:
+                        Console.Clear();
+                        Console.WriteLine("VYHĽADÁVANIE MIEN PODĽA DÁTUMU");
+                        Console.WriteLine("Pre ukončenie stlačte Enter.");
+
+                        while (true)
+                        {
+                            Console.Write("Zadajte deň a mesiac: ");
+                            var input = Console.ReadLine();
+                            if (input == "")
+                            {
+                                break;
+                            }
+
+                            var data = input.Split(".");
+                            var day = int.Parse(data[0]);
+                            var month = int.Parse(data[1]);
+                            var names = calendar[day, month];
+
                             if (names.Length == 0)
                             {
-                                output = "";
+                                Console.WriteLine("Neboli nájdené žiadne mená.");
+                                continue;
                             }
-                            else
+
+                            int i = 1;
+                            foreach (var name in names)
                             {
-                                output += names[0];
-                                for (int j = 1; j < names.Length; j++)
-                                {
-                                    output += ", ";
-                                    output += names[j];
-                                }
+                                Console.WriteLine(i + ". " + name);
+                                i++;
                             }
-                            Console.WriteLine(" " + date.Day + "." + date.Month + " " +
-                                              new DateTime(aktual.Year, date.Month, date.Day)
-                                                  .ToString("ddd", new CultureInfo("sk-SK")) + " " + output);
-                            Console.ForegroundColor = ConsoleColor.White;
                         }
-                        Console.WriteLine();
-                        Console.WriteLine("Šípka doľava / doprava - mesiac dozadu / dopredu.");
-                        Console.WriteLine("Šípka dole / hore - rok dozadu / dopredu.");
-                        Console.WriteLine("Kláves Home alebo D - aktuálny deň.");
-                        Console.WriteLine("Pre ukončenie stlačte Enter.");
-                        var input = Console.ReadKey();
+                        continue;
 
-                        if (input.Key.Equals(ConsoleKey.Enter))
-                        {
-                            break;
-                        }
-                        if (input.Key.Equals(ConsoleKey.UpArrow))
-                        {
-                            aktual = aktual.AddYears(1);
-                        }
-                        if (input.Key.Equals(ConsoleKey.DownArrow))
-                        {
-                            aktual = aktual.AddYears(-1);
-                        }
-                        if (input.Key.Equals(ConsoleKey.LeftArrow))
-                        {
-                            aktual = aktual.AddMonths(-1);
-                        }
-                        if (input.Key.Equals(ConsoleKey.RightArrow))
-                        {
-                            aktual = aktual.AddMonths(1);
-                        }
-                        if (input.Key.Equals(ConsoleKey.Home) || input.Key.Equals(ConsoleKey.H))
-                        {
-                            aktual = DateTime.Now;
-                        }
-                    }
-                    // TODO navrat na menu
-                    break;
+                    case ConsoleKey.NumPad5:
+                        Console.Clear();
+                        var aktual = DateTime.Now;
+                        var mesiace = new string[] { "január", "február", "marec", "apríl", "máj", "jún", "júl", "august", "september", "október", "november", "december" };
 
-                case ConsoleKey.NumPad6:
-                    Console.Clear();
-                    Environment.Exit(0);
-                    break;
-                case ConsoleKey.Escape:
-                    Console.Clear();
-                    Environment.Exit(0);
-                    break;
+                        while (true)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("KALENDÁR MENÍN");
+                            Console.WriteLine(mesiace[aktual.Month] + " " + aktual.Year + ":");
+
+                            for (int i = 1; i <= DateTime.DaysInMonth(aktual.Year, aktual.Month); i++)
+                            {
+                                var date = new DateTime(aktual.Year, aktual.Month, i);
+                                if (date.Month == DateTime.Now.Month && date.Day == DateTime.Now.Day)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                }
+
+                                if (date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                }
+                                var names = calendar[date];
+                                var output = "";
+                                if (names.Length == 0)
+                                {
+                                    output = "";
+                                }
+                                else
+                                {
+                                    output += names[0];
+                                    for (int j = 1; j < names.Length; j++)
+                                    {
+                                        output += ", ";
+                                        output += names[j];
+                                    }
+                                }
+                                Console.WriteLine(" " + date.Day + "." + date.Month + " " +
+                                                  new DateTime(aktual.Year, date.Month, date.Day)
+                                                      .ToString("ddd", new CultureInfo("sk-SK")) + " " + output);
+                                Console.ForegroundColor = ConsoleColor.White;
+                            }
+                            Console.WriteLine();
+                            Console.WriteLine("Šípka doľava / doprava - mesiac dozadu / dopredu.");
+                            Console.WriteLine("Šípka dole / hore - rok dozadu / dopredu.");
+                            Console.WriteLine("Kláves Home alebo D - aktuálny deň.");
+                            Console.WriteLine("Pre ukončenie stlačte Enter.");
+                            var input = Console.ReadKey();
+
+                            if (input.Key.Equals(ConsoleKey.Enter))
+                            {
+                                break;
+                            }
+                            if (input.Key.Equals(ConsoleKey.UpArrow))
+                            {
+                                aktual = aktual.AddYears(1);
+                            }
+                            if (input.Key.Equals(ConsoleKey.DownArrow))
+                            {
+                                aktual = aktual.AddYears(-1);
+                            }
+                            if (input.Key.Equals(ConsoleKey.LeftArrow))
+                            {
+                                aktual = aktual.AddMonths(-1);
+                            }
+                            if (input.Key.Equals(ConsoleKey.RightArrow))
+                            {
+                                aktual = aktual.AddMonths(1);
+                            }
+                            if (input.Key.Equals(ConsoleKey.Home) || input.Key.Equals(ConsoleKey.H))
+                            {
+                                aktual = DateTime.Now;
+                            }
+                        }
+                        continue;
+
+                    case ConsoleKey.NumPad6:
+                        Console.Clear();
+                        Environment.Exit(0);
+                        break;
+                    case ConsoleKey.Escape:
+                        Console.Clear();
+                        Environment.Exit(0);
+                        break;
+                }
+                break;
             }
             return 0;
         }
