@@ -190,13 +190,12 @@ namespace Uniza.Namedays.ViewerConsoleApp
                     case ConsoleKey.NumPad5:
                         Console.Clear();
                         var aktual = DateTime.Now;
-                        var mesiace = new string[] { "január", "február", "marec", "apríl", "máj", "jún", "júl", "august", "september", "október", "november", "december" };
 
                         while (true)
                         {
                             Console.Clear();
                             Console.WriteLine("KALENDÁR MENÍN");
-                            Console.WriteLine(mesiace[aktual.Month] + " " + aktual.Year + ":");
+                            Console.WriteLine(aktual.ToString("MMM") + " " + aktual.Year + ":");
 
                             for (int i = 1; i <= DateTime.DaysInMonth(aktual.Year, aktual.Month); i++)
                             {
@@ -257,7 +256,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                             {
                                 aktual = aktual.AddMonths(1);
                             }
-                            if (input.Key.Equals(ConsoleKey.Home) || input.Key.Equals(ConsoleKey.H))
+                            if (input.Key.Equals(ConsoleKey.Home) || input.Key.Equals(ConsoleKey.D))
                             {
                                 aktual = DateTime.Now;
                             }
