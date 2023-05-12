@@ -92,8 +92,13 @@ namespace Uniza.Namedays.ViewerConsoleApp
                     }
 
                     Console.WriteLine("Počet mien podľa začiatočných písmen: ");
-
-
+                    var pismena = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "Ľ", "M", "N", "O", "P", "R", "S", "Š", "T", "U", "V", "X", "Z", "Ž"};
+                    // TODO does not work with slovak diacritis
+                    for (int i = 0; i < pismena.Length; i++)
+                    {
+                        var count = calendar.GetNamedays(pismena[i]);
+                        Console.Write(pismena[i] + ": " + count.Count() + "\n");
+                    }
 
                     Console.WriteLine("Pre skončenie stlačte Enter.");
                     Console.ReadKey();
