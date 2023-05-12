@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualBasic;
-
-namespace Uniza.Namedays.ViewerConsoleApp
+﻿namespace Uniza.Namedays.ViewerConsoleApp
 {
     public class CLI
     {

@@ -164,17 +164,47 @@ namespace Uniza.Namedays
             _calendar.Clear();
         }
 
+        /// <summary>
+        /// Method loads data of namedays from a csv file.
+        /// </summary>
+        /// <param name="csvFile">csv file</param>
         public void Load(FileInfo csvFile)
         {
-            // TODO implement
-            // metóda načíta kalendár mien zo súboru s príponou CSV.
-            throw new NotImplementedException();
+            using var reader = new StreamReader(csvFile.FullName);
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+
+                var date = values[0];
+                var date_splitted = date.Split(" ");
+
+                var day_with_comma = date_splitted[0];
+                var day = day_with_comma.Substring(0,day_with_comma.Length-1);
+                var month_with_comma = date_splitted[1];
+                var month = month_with_comma.Substring(0, month_with_comma.Length - 1);
+
+                var dayMonth = new DayMonth(int.Parse(day), int.Parse(month));
+
+                for (var i = 1; i < values.Length; i++)
+                {
+                    if (values[i] != "-" || values[i] != "")
+                    {
+                        var nameday = new Nameday(values[i], dayMonth);
+                        _calendar.Add(nameday);
+                    }
+                }
+            }
         }
 
+        /// <summary>
+        /// Method saves data from calendar to csv file.
+        /// </summary>
+        /// <param name="csvFile"></param>
+        /// <exception cref="NotImplementedException"></exception>
         public void Write(FileInfo csvFile)
         {
             // TODO implement
-            // metóda zapíše kalendár mien do súboru s príponou CSV.
             throw new NotImplementedException();
         }
 
