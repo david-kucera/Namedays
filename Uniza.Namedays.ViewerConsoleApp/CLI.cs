@@ -4,12 +4,12 @@ namespace Uniza.Namedays.ViewerConsoleApp
 {
     public class CLI
     {
-        public static int Main()
+        public static int Main(string[] args)
         {
 
             NamedayCalendar calendar = new();
-            FileInfo vv = new FileInfo("names.csv");
-            calendar.Load(vv);
+            FileInfo def = new FileInfo(args[0]);
+            calendar.Load(def);
 
             Console.WriteLine("KALENDÁR MIEN");
 
@@ -121,10 +121,70 @@ namespace Uniza.Namedays.ViewerConsoleApp
 
                 case ConsoleKey.NumPad3:
                     Console.Clear();
-                    // TODO implement
+
+                    Console.WriteLine("VYHĽADÁVANIE MIEN");
+                    Console.WriteLine("Pre ukončenie stlačte Enter.");
+
+                    while (true)
+                    {
+                        Console.Write("Zadajte meno (regulárny výraz): ");
+                        var input = Console.ReadLine();
+                        if (input == "")
+                        {
+                            break;
+                        }
+
+                        var count = calendar.GetNamedays(input);
+
+                        if (count.Count() == 0)
+                        {
+                            Console.WriteLine("Neboli nájdené žiadne mená.");
+                            continue;
+                        }
+                        // TODO does not work .. does not show any names
+                        for (int i = 1; i <= count.Count(); i++)
+                        {
+                            var meno = count.GetEnumerator().Current;
+                            Console.Write(i + ". " + meno.Name + "(" + meno.DayMonth + ")\n");
+                            count.GetEnumerator().MoveNext();
+                        }
+                    }
+
+                    // TODO navrat na menu
                     break;
                 case ConsoleKey.NumPad4:
                     Console.Clear();
+                    Console.WriteLine("VYHĽADÁVANIE MIEN PODĽA DÁTUMU");
+                    Console.WriteLine("Pre ukončenie stlačte Enter.");
+
+                    while (true)
+                    {
+                        Console.Write("Zadajte deň a mesiac: ");
+                        var input = Console.ReadLine();
+                        if (input == "")
+                        {
+                            break;
+                        }
+
+                        var data = input.Split(".");
+                        var day = int.Parse(data[0]);
+                        var month = int.Parse(data[1]);
+                        var names = calendar[day, month];
+
+                        if (names.Length == 0)
+                        {
+                            Console.WriteLine("Neboli nájdené žiadne mená.");
+                            continue;
+                        }
+
+                        int i = 1;
+                        foreach (var name in names)
+                        {
+                            Console.WriteLine(i + ". " + name);
+                            i++;
+                        }
+                    }
+
                     // TODO implement
                     break;
                 case ConsoleKey.NumPad5:
