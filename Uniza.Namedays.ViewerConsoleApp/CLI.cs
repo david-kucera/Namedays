@@ -4,6 +4,7 @@
     {
         public static int Main()
         {
+            NamedayCalendar calendar = new NamedayCalendar();
             Console.WriteLine("KALENDÁR MIEN");
             // TODO set right values to dnes, kto, zajtra
             var dnes = DateTime.Now;
@@ -40,9 +41,9 @@
                         }
 
                         var index_dot = input.IndexOf('.');
-                        var type = input.Substring(index_dot, 3);
+                        var type = input.Substring(index_dot, 4);
 
-                        if (type != "csv")
+                        if (type != ".csv")
                         {
                             Console.WriteLine("Zadaný súbor " + input + " nie je typu CSV!");
                             continue;
@@ -56,12 +57,13 @@
                             continue;
                         }
 
+                        calendar.Load(info);
                         Console.WriteLine("Súbor kalendára bol načítaný.");
-                        Console.WriteLine("Pre porkačovanie stlačte Enter.");
+                        input_je_zly = false;
+                        Console.WriteLine("Pre pokračovanie stlačte Enter.");
+                        Console.ReadKey();
                     }
-                    
-
-                    // TODO implement
+                    // TODO navrat na menu
                     break;
                 case ConsoleKey.NumPad2:
                     Console.Clear();

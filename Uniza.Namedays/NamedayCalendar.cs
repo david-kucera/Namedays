@@ -175,7 +175,7 @@ namespace Uniza.Namedays
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
-                var values = line.Split(',');
+                var values = line.Split(';');
 
                 var date = values[0];
                 var date_splitted = date.Split(" ");
@@ -190,7 +190,7 @@ namespace Uniza.Namedays
                 for (var i = 1; i < values.Length; i++)
                 {
                     // check if name is not empty
-                    if (values[i] != "-" || values[i] != "")
+                    if (values[i].Contains('-') || values[i].Equals(""))
                     {
                         continue;
                     }

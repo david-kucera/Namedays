@@ -11,4 +11,10 @@
     <ProjectReference Include="..\Uniza.Namedays\Uniza.Namedays.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="names.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
