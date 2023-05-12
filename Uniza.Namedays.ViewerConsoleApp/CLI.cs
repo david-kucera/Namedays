@@ -10,24 +10,30 @@ namespace Uniza.Namedays.ViewerConsoleApp
         {
 
             NamedayCalendar calendar = new();
-            FileInfo def = new FileInfo(args[0]);
+            FileInfo def = new(args[0]);
             calendar.Load(def);
 
             while (true)
             {
                 Console.Clear();
                 Console.WriteLine("KALENDÁR MIEN");
-                string kto;
-                try
+                var celebrators = calendar[DateTime.Now.Day, DateTime.Now.Month];
+                string mena;
+                if (celebrators.Length == 0)
                 {
-                    kto = calendar[DateTime.Now.Day, DateTime.Now.Month][0];
+                    mena = "nemá nikto meniny.";
                 }
-                catch (Exception)
+                else
                 {
-                    kto = "nemá nikto meniny.";
+                    mena = celebrators[0];
+                    for (var i = 1; i < celebrators.Length; i++)
+                    {
+                        mena += ", ";
+                        mena += celebrators[i];
+                    }
                 }
 
-                Console.WriteLine("Dnes " + DateTime.Now.ToString("dd/MM/yyyy") + " " + kto);
+                Console.WriteLine("Dnes " + DateTime.Now.ToString("dd/MM/yyyy") + " " + mena);
                 Console.WriteLine("Zajtra má meniny: " + calendar[DateTime.Now.AddDays(1).Day, DateTime.Now.AddDays(1).Month][0]);
                 Console.WriteLine("");
 
