@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Uniza.Namedays
@@ -180,7 +181,7 @@ namespace Uniza.Namedays
                 var date_splitted = date.Split(" ");
 
                 var day_with_comma = date_splitted[0];
-                var day = day_with_comma.Substring(0,day_with_comma.Length-1);
+                var day = day_with_comma.Substring(0,day_with_comma.Length - 1);
                 var month_with_comma = date_splitted[1];
                 var month = month_with_comma.Substring(0, month_with_comma.Length - 1);
 
@@ -188,11 +189,13 @@ namespace Uniza.Namedays
 
                 for (var i = 1; i < values.Length; i++)
                 {
+                    // check if name is not empty
                     if (values[i] != "-" || values[i] != "")
                     {
-                        var nameday = new Nameday(values[i], dayMonth);
-                        _calendar.Add(nameday);
+                        continue;
                     }
+                    var nameday = new Nameday(values[i], dayMonth);
+                    _calendar.Add(nameday);
                 }
             }
         }
@@ -200,12 +203,14 @@ namespace Uniza.Namedays
         /// <summary>
         /// Method saves data from calendar to csv file.
         /// </summary>
-        /// <param name="csvFile"></param>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <param name="csvFile">CSV file</param>
         public void Write(FileInfo csvFile)
         {
-            // TODO implement
-            throw new NotImplementedException();
+            using var writer = new StreamWriter(csvFile.FullName);
+            foreach (var line in _calendar.Select(nameday => new string[] { nameday.DayMonth.ToString(), nameday.Name }).Select(data => string.Join(";", data)))
+            {
+                writer.WriteLine(line);
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -5,7 +5,6 @@
         public static int Main()
         {
             Console.WriteLine("KALENDÁR MIEN");
-
             // TODO set right values to dnes, kto, zajtra
             var dnes = DateTime.Now;
             var kto = "Emil";
@@ -22,36 +21,73 @@
             Console.WriteLine("5 - zobraziť kalendár mien v mesiaci");
             Console.WriteLine("6 | Escape - koniec");
             Console.Write("Vaša voľba ");
-            var volba = Console.Read();
+            var volba = Console.ReadKey();
 
-            switch (volba)
+            switch (volba.Key)
             {
-                case 1:
+                case ConsoleKey.NumPad1:
                     Console.Clear();
-                    // TODO implement
-                    break;
-                case 2:
-                    Console.Clear();
-                    // TODO implement
-                    break;
-                case 3:
-                    Console.Clear();
-                    // TODO implement
-                    break;
-                case 4:
-                    Console.Clear();
-                    // TODO implement
-                    break;
-                case 5:
-                    Console.Clear();
-                    // TODO implement
-                    break;
-                case 6:
-                    Console.Clear();
-                    // TODO implement
-                    return 0;
-            }
+                    Console.WriteLine("OTVORENIE");
+                    Console.WriteLine("Zadajte cestu k súboru kalendára mien alebo stlačte Enter pre ukončenie.");
+                    var input_je_zly = true;
+                    while (input_je_zly)
+                    {
+                        Console.WriteLine("Zadajte cestu k CSV súboru: ");
+                        var input = Console.ReadLine();
+                        if (input == "")
+                        {
+                            Environment.Exit(0);
+                        }
 
+                        var index_dot = input.IndexOf('.');
+                        var type = input.Substring(index_dot, 3);
+
+                        if (type != "csv")
+                        {
+                            Console.WriteLine("Zadaný súbor " + input + " nie je typu CSV!");
+                            continue;
+                        }
+
+                        FileInfo info = new FileInfo(input);
+
+                        if (!info.Exists)
+                        {
+                            Console.WriteLine("Zadaný súbor " + input + " neexistuje!");
+                            continue;
+                        }
+
+                        Console.WriteLine("Súbor kalendára bol načítaný.");
+                        Console.WriteLine("Pre porkačovanie stlačte Enter.");
+                    }
+                    
+
+                    // TODO implement
+                    break;
+                case ConsoleKey.NumPad2:
+                    Console.Clear();
+                    // TODO implement
+                    break;
+                case ConsoleKey.NumPad3:
+                    Console.Clear();
+                    // TODO implement
+                    break;
+                case ConsoleKey.NumPad4:
+                    Console.Clear();
+                    // TODO implement
+                    break;
+                case ConsoleKey.NumPad5:
+                    Console.Clear();
+                    // TODO implement
+                    break;
+                case ConsoleKey.NumPad6:
+                    Console.Clear();
+                    Environment.Exit(0);
+                    break;
+                case ConsoleKey.Escape:
+                    Console.Clear();
+                    Environment.Exit(0);
+                    break;
+            }
             return 0;
         }
         
