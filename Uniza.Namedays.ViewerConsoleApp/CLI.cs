@@ -62,7 +62,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                             continue;
                         }
 
-                        FileInfo info = new FileInfo(input);
+                        FileInfo info = new(input);
 
                         if (!info.Exists)
                         {
@@ -78,6 +78,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                     }
                     // TODO navrat na menu
                     break;
+
                 case ConsoleKey.NumPad2:
                     Console.Clear();
                     Console.WriteLine("ŠTATISTIKA");
@@ -100,9 +101,24 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         Console.Write(pismena[i] + ": " + count.Count() + "\n");
                     }
 
+                    Console.WriteLine("Počet mien podľa dĺžky znakov:");
+                    for (int i = 0; i < 12; i++)
+                    {
+                        var count = calendar.GetNamedays(i, true);
+                        // TODO does not show appropriate number, probably because of encoding of csv file
+                        if (count.Count() == 0)
+                        {
+                            continue;
+                        }
+
+                        Console.WriteLine(i + ": " + count.Count());
+                    }
+
                     Console.WriteLine("Pre skončenie stlačte Enter.");
                     Console.ReadKey();
+                    // TODO navrat na menu
                     break;
+
                 case ConsoleKey.NumPad3:
                     Console.Clear();
                     // TODO implement

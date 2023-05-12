@@ -64,6 +64,12 @@ namespace Uniza.Namedays
             return _calendar.GetEnumerator();
         }
 
+        // TODO added method, add docs
+        public IEnumerable<Nameday> GetNamedays(int number_of_chars, bool boo)
+        {
+            return from nameday in _calendar where nameday.Name.Length == number_of_chars select nameday;
+        }
+
         /// <summary>
         /// Method returns all namedays in that month.
         /// </summary>
