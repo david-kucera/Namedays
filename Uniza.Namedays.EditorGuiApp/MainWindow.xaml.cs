@@ -22,27 +22,33 @@ namespace Uniza.Namedays.EditorGuiApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private NamedayCalendar calendar;
-        private double version = 1.0;
+        private NamedayCalendar _calendar;
+        private const double _version = 1.0;
+
         public MainWindow()
         {
-            calendar = new NamedayCalendar();
+            _calendar = new NamedayCalendar();
             FileInfo fi = new FileInfo("names.csv");
-            calendar.Load(fi);
+            _calendar.Load(fi);
             InitializeComponent();
             calendarG.DisplayDate = DateTime.Now.Date;
             Celebrates.Content = calendarG.DisplayDate.ToString("dd.MM.yyyy") + " celebrates:";
+            var celebrs = _calendar[calendarG.DisplayDate];
+            foreach (var name in celebrs)
+            {
+                Celebrators.Items.Add(name);
+            }
         }
 
         private void Menu_New_Click(object sender, RoutedEventArgs e)
         {
-            if (calendar.Any())
+            if (_calendar.Any())
             {
                 var option = MessageBox.Show("Do you wish to clear the calendar?", "Clear calendar", MessageBoxButton.YesNoCancel,
                     MessageBoxImage.Question, MessageBoxResult.No);
                 if (option == MessageBoxResult.Yes)
                 {
-                    calendar.Clear();
+                    _calendar.Clear();
                 }
             }
             else
@@ -62,7 +68,7 @@ namespace Uniza.Namedays.EditorGuiApp
                 if (fileDialog.FileName.Any())
                 {
                     FileInfo fi = new(fileDialog.FileName);
-                    calendar.Load(fi);
+                    _calendar.Load(fi);
                 }
                 else
                 {
@@ -82,7 +88,7 @@ namespace Uniza.Namedays.EditorGuiApp
                 if (saveFileDialog.FileName.Any())
                 {
                     FileInfo fi = new(saveFileDialog.FileName);
-                    calendar.Write(fi);
+                    _calendar.Write(fi);
                 }
                 else
                 {
@@ -101,16 +107,41 @@ namespace Uniza.Namedays.EditorGuiApp
         {
             // TODO make new WPF window
             var text = "Namedays\n" +
-                       "Version " + version + "\n" +
+                       "Version " + _version + "\n" +
                        "Copyright (c) 2023 David Kučera\n" +
                        "\n" +
                        "This is an app for editing and viewing namedays.";
             MessageBox.Show(text, "About application", MessageBoxButton.OK);
         }
 
-        private void Calendar_Changed(object? sender, CalendarDateChangedEventArgs e)
+        private void Calendar_Changed(object? sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
-            
+            var cal = sender as Calendar;
+            if (cal.SelectedDate.HasValue)
+            {
+                DateTime date = cal.SelectedDate.Value;
+                Celebrators.Items.Clear();
+                Celebrates.Content = date.ToString("dd.MM.yyyy") + " celebrates:";
+                var celebrs = _calendar[date];
+                foreach (var name in celebrs)
+                {
+                    Celebrators.Items.Add(name);
+                }
+            }
+        }
+
+        private void Today_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime date = DateTime.Now.Date;
+            calendarG.DisplayDate = date;
+            calendarG.SelectedDate = date;
+            Celebrators.Items.Clear();
+            Celebrates.Content = date.ToString("dd.MM.yyyy") + " celebrates:";
+            var celebrs = _calendar[date];
+            foreach (var name in celebrs)
+            {
+                Celebrators.Items.Add(name);
+            }
         }
     }
 }

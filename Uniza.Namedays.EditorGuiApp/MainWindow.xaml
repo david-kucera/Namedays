@@ -20,7 +20,8 @@
             </MenuItem>
         </Menu>
         <StackPanel Margin="10">
-            <Calendar Name="calendarG" SelectionMode="SingleDate" DisplayDateChanged="Calendar_Changed"/>
+            <Button Name="Today" Click="Today_Click" Width="90">Today</Button>
+            <Calendar Name="calendarG" SelectionMode="SingleDate" SelectedDatesChanged="Calendar_Changed"/>
             <Label Name="Celebrates"></Label>
             <ListBox Name="Celebrators"  MinHeight="150" />
         </StackPanel>
