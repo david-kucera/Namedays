@@ -19,18 +19,29 @@
                 <MenuItem Header="_About..." Click="Menu_About_Click"/>
             </MenuItem>
         </Menu>
-        <StackPanel Margin="10,10,10, 10" Width="500">
 
-        </StackPanel>
-        <GroupBox Header="Calendar">
+        <GroupBox Header="Editor" Margin="5">
+            <StackPanel Margin="10,0,10,300" Width="400" Height="90">
+                <WrapPanel Orientation="Horizontal">
+                        <GroupBox Header="Filter">
+                            <WrapPanel>
+                            <Label>Month:</Label>
+                                <ComboBox Name="MonthsBox" MinWidth="100"></ComboBox>
+                                <Label>Regex filter:</Label>
+                                <TextBox MinWidth="150"></TextBox>
+                        </WrapPanel>
+                        </GroupBox>
+                    </WrapPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Calendar" Margin="5">
             <StackPanel Margin="0,0,0,0" Name="Calendar">
                 <Button Name="Today" Click="Today_Click" Width="90">Today</Button>
                 <Calendar Name="calendarG" SelectionMode="SingleDate" SelectedDatesChanged="Calendar_Changed"/>
                 <Label Name="Celebrates" Width="175"></Label>
-                <ListBox Name="Celebrators"  MinHeight="150" Width="175" />
+                <ListBox Name="Celebrators"  MinHeight="125" Width="180" />
             </StackPanel>
         </GroupBox>
-        
-        
     </DockPanel>
 </Window>

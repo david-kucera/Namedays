@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.VisualBasic;
 using Microsoft.Win32;
 
 namespace Uniza.Namedays.EditorGuiApp
@@ -38,6 +40,13 @@ namespace Uniza.Namedays.EditorGuiApp
             {
                 Celebrators.Items.Add(name);
             }
+
+            DateTimeFormatInfo dateFormat = new DateTimeFormatInfo();
+            for (int i = 1; i <= 12; i++)
+            {
+                MonthsBox.Items.Add(dateFormat.GetMonthName(i));
+            }
+
         }
 
         private void Menu_New_Click(object sender, RoutedEventArgs e)
@@ -116,10 +125,9 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Calendar_Changed(object? sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
-            var cal = sender as Calendar;
-            if (cal.SelectedDate.HasValue)
+            if (calendarG.SelectedDate.HasValue)
             {
-                DateTime date = cal.SelectedDate.Value;
+                DateTime date = calendarG.SelectedDate.Value;
                 Celebrators.Items.Clear();
                 Celebrates.Content = date.ToString("dd.MM.yyyy") + " celebrates:";
                 var celebrs = _calendar[date];
