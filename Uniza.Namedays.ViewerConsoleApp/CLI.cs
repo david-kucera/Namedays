@@ -49,7 +49,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
 
                 switch (volba.Key)
                 {
-                    case ConsoleKey.NumPad1:
+                    case ConsoleKey.D1 or ConsoleKey.NumPad1:
                         Console.Clear();
                         Console.WriteLine("OTVORENIE");
                         Console.WriteLine("Zadajte cestu k súboru kalendára mien alebo stlačte Enter pre ukončenie.");
@@ -87,7 +87,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         }
                         continue;
 
-                    case ConsoleKey.NumPad2:
+                    case ConsoleKey.D2 or ConsoleKey.NumPad2:
                         Console.Clear();
                         Console.WriteLine("ŠTATISTIKA");
                         Console.WriteLine("Celkový počet mien v kalendári: " + calendar.NameCount);
@@ -113,7 +113,9 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         for (var i = 0; i < 12; i++)
                         {
                             var count = calendar.GetNamedays(i, true);
+
                             // TODO does not show appropriate number, probably because of encoding of csv file
+
                             if (count.Count() == 0)
                             {
                                 continue;
@@ -126,7 +128,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         Console.ReadKey();
                         continue;
 
-                    case ConsoleKey.NumPad3:
+                    case ConsoleKey.D3 or ConsoleKey.NumPad3:
                         Console.Clear();
 
                         Console.WriteLine("VYHĽADÁVANIE MIEN");
@@ -141,14 +143,16 @@ namespace Uniza.Namedays.ViewerConsoleApp
                                 break;
                             }
 
-                            var count = calendar.GetNamedays(input);
+                            var count = calendar.GetNamedays(input!);
 
                             if (count.Count() == 0)
                             {
                                 Console.WriteLine("Neboli nájdené žiadne mená.");
                                 continue;
                             }
+
                             // TODO does not work .. does not show any names
+
                             for (int i = 1; i <= count.Count(); i++)
                             {
                                 var meno = count.GetEnumerator().Current;
@@ -158,7 +162,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         }
                         continue;
 
-                    case ConsoleKey.NumPad4:
+                    case ConsoleKey.D4 or ConsoleKey.NumPad4:
                         Console.Clear();
                         Console.WriteLine("VYHĽADÁVANIE MIEN PODĽA DÁTUMU");
                         Console.WriteLine("Pre ukončenie stlačte Enter.");
@@ -172,7 +176,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                                 break;
                             }
 
-                            var data = input.Split(".");
+                            var data = input!.Split(".");
                             var day = int.Parse(data[0]);
                             var month = int.Parse(data[1]);
                             var names = calendar[day, month];
@@ -192,7 +196,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         }
                         continue;
 
-                    case ConsoleKey.NumPad5:
+                    case ConsoleKey.D5 or ConsoleKey.NumPad5:
                         Console.Clear();
                         var aktual = DateTime.Now;
 
@@ -205,15 +209,16 @@ namespace Uniza.Namedays.ViewerConsoleApp
                             for (var i = 1; i <= DateTime.DaysInMonth(aktual.Year, aktual.Month); i++)
                             {
                                 var date = new DateTime(aktual.Year, aktual.Month, i);
-                                if (date.Month == DateTime.Now.Month && date.Day == DateTime.Now.Day)
-                                {
-                                    Console.ForegroundColor = ConsoleColor.Green;
-                                }
 
                                 if (date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
                                 {
                                     Console.ForegroundColor = ConsoleColor.Red;
                                 }
+                                if (date.Month == DateTime.Now.Month && date.Day == DateTime.Now.Day && date.Year == DateTime.Now.Year)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Green;
+                                }
+
                                 var names = calendar[date];
                                 var output = "";
                                 if (names.Length == 0)
@@ -245,37 +250,34 @@ namespace Uniza.Namedays.ViewerConsoleApp
                             {
                                 break;
                             }
-                            if (input.Key.Equals(ConsoleKey.UpArrow))
+                            switch (input.Key)
                             {
-                                aktual = aktual.AddYears(1);
-                            }
-                            if (input.Key.Equals(ConsoleKey.DownArrow))
-                            {
-                                aktual = aktual.AddYears(-1);
-                            }
-                            if (input.Key.Equals(ConsoleKey.LeftArrow))
-                            {
-                                aktual = aktual.AddMonths(-1);
-                            }
-                            if (input.Key.Equals(ConsoleKey.RightArrow))
-                            {
-                                aktual = aktual.AddMonths(1);
-                            }
-                            if (input.Key.Equals(ConsoleKey.Home) || input.Key.Equals(ConsoleKey.D))
-                            {
-                                aktual = DateTime.Now;
+                                case ConsoleKey.UpArrow:
+                                    aktual = aktual.AddYears(1);
+                                    break;
+                                case ConsoleKey.DownArrow:
+                                    aktual = aktual.AddYears(-1);
+                                    break;
+                                case ConsoleKey.LeftArrow:
+                                    aktual = aktual.AddMonths(-1);
+                                    break;
+                                case ConsoleKey.RightArrow:
+                                    aktual = aktual.AddMonths(1);
+                                    break;
+                                case ConsoleKey.Home:
+                                case ConsoleKey.D:
+                                    aktual = DateTime.Now;
+                                    break;
                             }
                         }
                         continue;
 
-                    case ConsoleKey.NumPad6:
+                    case ConsoleKey.D6 or ConsoleKey.NumPad6 or ConsoleKey.Escape:
                         Console.Clear();
                         Environment.Exit(0);
                         break;
-                    case ConsoleKey.Escape:
-                        Console.Clear();
-                        Environment.Exit(0);
-                        break;
+                    default: // If clicked other option, wait for right input.
+                        continue;
                 }
                 break;
             }

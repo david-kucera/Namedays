@@ -64,10 +64,15 @@ namespace Uniza.Namedays
             return _calendar.GetEnumerator();
         }
 
-        // TODO added method, add docs
-        public IEnumerable<Nameday> GetNamedays(int number_of_chars, bool boo)
+        /// <summary>
+        /// Method returns namedays which name length equals the parameter numberOfChars.
+        /// </summary>
+        /// <param name="numberOfChars">Number of characters</param>
+        /// <param name="boo">Just another param, to diffrenciate from other method</param>
+        /// <returns></returns>
+        public IEnumerable<Nameday> GetNamedays(int numberOfChars, bool boo)
         {
-            return from nameday in _calendar where nameday.Name.Length == number_of_chars select nameday;
+            return from nameday in _calendar where nameday.Name.Length == numberOfChars select nameday;
         }
 
         /// <summary>
