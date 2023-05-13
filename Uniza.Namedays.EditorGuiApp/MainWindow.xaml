@@ -19,11 +19,18 @@
                 <MenuItem Header="_About..." Click="Menu_About_Click"/>
             </MenuItem>
         </Menu>
-        <StackPanel Margin="10">
-            <Button Name="Today" Click="Today_Click" Width="90">Today</Button>
-            <Calendar Name="calendarG" SelectionMode="SingleDate" SelectedDatesChanged="Calendar_Changed"/>
-            <Label Name="Celebrates"></Label>
-            <ListBox Name="Celebrators"  MinHeight="150" />
+        <StackPanel Margin="10,10,10, 10" Width="500">
+
         </StackPanel>
+        <GroupBox Header="Calendar">
+            <StackPanel Margin="0,0,0,0" Name="Calendar">
+                <Button Name="Today" Click="Today_Click" Width="90">Today</Button>
+                <Calendar Name="calendarG" SelectionMode="SingleDate" SelectedDatesChanged="Calendar_Changed"/>
+                <Label Name="Celebrates" Width="175"></Label>
+                <ListBox Name="Celebrators"  MinHeight="150" Width="175" />
+            </StackPanel>
+        </GroupBox>
+        
+        
     </DockPanel>
 </Window>
