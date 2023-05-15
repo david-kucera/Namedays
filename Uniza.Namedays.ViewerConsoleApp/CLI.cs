@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text;
 using System.Xml.Linq;
 
 namespace Uniza.Namedays.ViewerConsoleApp
@@ -8,6 +9,8 @@ namespace Uniza.Namedays.ViewerConsoleApp
     {
         public static int Main(string[] args)
         {
+            Console.InputEncoding = Encoding.Unicode;
+            Console.OutputEncoding = Encoding.Unicode;
 
             NamedayCalendar calendar = new();
             FileInfo def = new(args[0]);

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Uniza.Namedays
@@ -181,7 +182,7 @@ namespace Uniza.Namedays
         /// <param name="csvFile">csv file</param>
         public void Load(FileInfo csvFile)
         {
-            using var reader = new StreamReader(csvFile.FullName);
+            using var reader = new StreamReader(csvFile.FullName, Encoding.Latin1);
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
