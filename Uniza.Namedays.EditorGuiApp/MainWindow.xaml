@@ -94,8 +94,8 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Button Grid.Row="0" Click="Add_Date_Click" Content="Add..." Margin="5" Padding="5"/>
-                            <Button Grid.Row="1" Click="Edit_Date_Click" Content="Edit..." Margin="5" Padding="5"/>
-                            <Button Grid.Row="2" Click="Remove_Date_Click" Content="Remove" Margin="5" Padding="5"/>
+                            <Button x:Name="Edit_BT" Grid.Row="1" Click="Edit_Date_Click" Content="Edit..." Margin="5" Padding="5"/>
+                            <Button x:Name="Remove_BT" Grid.Row="2" Click="Remove_Date_Click" Content="Remove" Margin="5" Padding="5"/>
                         </Grid>
                         <Grid HorizontalAlignment="Right" VerticalAlignment="Bottom">
                             <Grid.RowDefinitions>
@@ -103,7 +103,7 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Button Click="Show_On_Calendar_Click" Grid.Row="0" VerticalAlignment="Top" Margin="5" Padding="20,5">
-                                <TextBlock TextWrapping="Wrap" TextAlignment="Center">Show on <LineBreak/> calendar</TextBlock>
+                                <TextBlock x:Name="Show_On_Cal_BT" TextWrapping="Wrap" TextAlignment="Center">Show on <LineBreak/> calendar</TextBlock>
                             </Button>
                             <Label Name="Count_Label" Grid.Row="1" VerticalAlignment="Bottom"/>
                         </Grid>

@@ -54,6 +54,12 @@ namespace Uniza.Namedays.EditorGuiApp
             MonthsBox.SelectionChanged += FilterChanged;
             RegexFilterBox.PreviewKeyUp += FilterChanged;
 
+            Disable_Buttons(null, null);
+
+            Namedays_ListBox.GotFocus += Enable_Buttons;
+            MonthsBox.GotFocus += Disable_Buttons;
+            RegexFilterBox.GotFocus += Disable_Buttons;
+
         }
 
         private void Menu_New_Click(object sender, RoutedEventArgs e)
@@ -163,6 +169,7 @@ namespace Uniza.Namedays.EditorGuiApp
         {
             RegexFilterBox.Text = "";
             MonthsBox.SelectedIndex = 0;
+            Disable_Buttons(sender, e);
         }
 
         private void FilterChanged(object? sender, EventArgs e)
@@ -243,7 +250,7 @@ namespace Uniza.Namedays.EditorGuiApp
                 _calendar.Add(dayMonth, name);
             }
             FilterChanged(sender, e);
-            //DisableButtons(sender, e);
+            Disable_Buttons(sender, e);
         }
 
         private void Remove_Date_Click(object sender, RoutedEventArgs e)
@@ -255,12 +262,28 @@ namespace Uniza.Namedays.EditorGuiApp
                 _calendar.Remove(selectedItem.Name);
             }
             FilterChanged(sender, e);
-            //DisableButtons(sender, e);
+            Disable_Buttons(sender, e);
         }
 
         private void Show_On_Calendar_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
+            CalendarG.SelectedDate = selectedItem.DayMonth.ToDateTime();
+            CalendarG.DisplayDate = selectedItem.DayMonth.ToDateTime();
+        }
+
+        private void Disable_Buttons(object sender, EventArgs e)
+        {
+            Edit_BT.IsEnabled = false;
+            Remove_BT.IsEnabled = false;
+            Show_On_Cal_BT.IsEnabled = false;
+        }
+
+        private void Enable_Buttons(object sender, EventArgs e)
+        {
+            Edit_BT.IsEnabled = true;
+            Remove_BT.IsEnabled = true;
+            Show_On_Cal_BT.IsEnabled = true;
         }
 
     }
