@@ -60,9 +60,9 @@ namespace Uniza.Namedays
         /// Method returns all namedays in calendar.
         /// </summary>
         /// <returns>All Namedays in calendar</returns>
-        public IEnumerator<Nameday> GetNamedays()
+        public IEnumerable<Nameday> GetNamedays()
         {
-            return _calendar.GetEnumerator();
+            return _calendar;
         }
 
         /// <summary>

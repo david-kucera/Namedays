@@ -30,22 +30,29 @@ namespace Uniza.Namedays.EditorGuiApp
         public MainWindow()
         {
             _calendar = new NamedayCalendar();
-            FileInfo fi = new FileInfo("names.csv");
+            FileInfo fi = new FileInfo("namedays-sk.csv");
             _calendar.Load(fi);
             InitializeComponent();
-            calendarG.DisplayDate = DateTime.Now.Date;
-            Celebrates.Content = calendarG.DisplayDate.ToString("dd.MM.yyyy") + " celebrates:";
-            var celebrs = _calendar[calendarG.DisplayDate];
+
+            CalendarG.DisplayDate = DateTime.Now.Date;
+            Celebrates.Content = CalendarG.DisplayDate.ToString("dd.MM.yyyy") + " celebrates:";
+            var celebrs = _calendar[CalendarG.DisplayDate];
             foreach (var name in celebrs)
             {
                 Celebrators.Items.Add(name);
             }
 
             DateTimeFormatInfo dateFormat = new DateTimeFormatInfo();
+            MonthsBox.Items.Add("");
             for (int i = 1; i <= 12; i++)
             {
                 MonthsBox.Items.Add(dateFormat.GetMonthName(i));
             }
+
+            Count_Label.Content = "Count 0 / 0";
+
+            MonthsBox.SelectionChanged += FilterChanged;
+            RegexFilterBox.PreviewKeyUp += FilterChanged;
 
         }
 
@@ -125,9 +132,9 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Calendar_Changed(object? sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
-            if (calendarG.SelectedDate.HasValue)
+            if (CalendarG.SelectedDate.HasValue)
             {
-                DateTime date = calendarG.SelectedDate.Value;
+                DateTime date = CalendarG.SelectedDate.Value;
                 Celebrators.Items.Clear();
                 Celebrates.Content = date.ToString("dd.MM.yyyy") + " celebrates:";
                 var celebrs = _calendar[date];
@@ -141,8 +148,8 @@ namespace Uniza.Namedays.EditorGuiApp
         private void Today_Click(object sender, RoutedEventArgs e)
         {
             DateTime date = DateTime.Now.Date;
-            calendarG.DisplayDate = date;
-            calendarG.SelectedDate = date;
+            CalendarG.DisplayDate = date;
+            CalendarG.SelectedDate = date;
             Celebrators.Items.Clear();
             Celebrates.Content = date.ToString("dd.MM.yyyy") + " celebrates:";
             var celebrs = _calendar[date];
@@ -151,5 +158,110 @@ namespace Uniza.Namedays.EditorGuiApp
                 Celebrators.Items.Add(name);
             }
         }
+
+        private void Clear_Filter_Click(object sender, RoutedEventArgs e)
+        {
+            RegexFilterBox.Text = "";
+            MonthsBox.SelectedIndex = 0;
+        }
+
+        private void FilterChanged(object? sender, EventArgs e)
+        {
+            IEnumerable<Nameday> menaRegex;
+            if (sender != null && sender.GetType() == typeof(TextBox) && ((KeyEventArgs)e).Key == Key.Enter)
+            {
+                menaRegex = _calendar.GetNamedays(RegexFilterBox.Text);
+            }
+            else
+            {
+                menaRegex = _calendar.GetNamedays();
+            }
+
+            IEnumerable<Nameday> namesMonth = _calendar.GetNamedays(); ;
+            if (MonthsBox.SelectedIndex != 0)
+            {
+                namesMonth = _calendar.GetNamedays(MonthsBox.SelectedIndex);
+            }
+
+            var intersect = namesMonth.Intersect(menaRegex);
+
+            Namedays_ListBox.Items.Clear();
+            foreach (var nameday in intersect)
+            {
+                Namedays_ListBox.Items.Add(nameday);
+            }
+
+            Update_Count();
+        }
+
+        private void Update_Count()
+        {
+            var count = Namedays_ListBox.Items.Count;
+            var total = _calendar.NameCount;
+            Count_Label.Content = "Count: " + count + " / " + total;
+        }
+
+        private void Add_Date_Click(object sender, RoutedEventArgs e)
+        {
+            var newNameday = new AddWindow();
+            newNameday.ShowDialog();
+
+            var date = newNameday.DatePicker.SelectedDate;
+            var name = newNameday.TextBox.Text;
+
+            if (date != null && name != "")
+            {
+                _calendar.Add(date.Value.Day, date.Value.Month, name);
+            }
+
+            Update_Count();
+        }
+
+        private void Edit_Date_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
+            var editWindow = new EditWindow 
+            {
+                DatePicker = 
+                {
+                    SelectedDate = selectedItem.DayMonth.ToDateTime()
+                },
+                TextBox = 
+                {
+                    Text = selectedItem.Name
+                }
+            };
+            editWindow.Show();
+
+            if (editWindow.DatePicker.SelectedDate != null)
+            {
+                _calendar.Remove(selectedItem.Name);
+                var day = editWindow.DatePicker.SelectedDate.Value.Day;
+                var month = editWindow.DatePicker.SelectedDate.Value.Month;
+                var dayMonth = new DayMonth(day, month);
+                var name = editWindow.TextBox.Text;
+                _calendar.Add(dayMonth, name);
+            }
+            FilterChanged(sender, e);
+            //DisableButtons(sender, e);
+        }
+
+        private void Remove_Date_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
+            var removeMB = MessageBox.Show("Do you really want to remove selected nameday(" + selectedItem.Name + ")?", "Remove nameday", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (removeMB == MessageBoxResult.Yes)
+            {
+                _calendar.Remove(selectedItem.Name);
+            }
+            FilterChanged(sender, e);
+            //DisableButtons(sender, e);
+        }
+
+        private void Show_On_Calendar_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
