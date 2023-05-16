@@ -3,18 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.VisualBasic;
 using Microsoft.Win32;
 
 namespace Uniza.Namedays.EditorGuiApp
@@ -55,6 +46,7 @@ namespace Uniza.Namedays.EditorGuiApp
             RegexFilterBox.PreviewKeyUp += FilterChanged;
 
             Disable_Buttons(null, null);
+            Show_On_Cal_BT.IsEnabled = false;
 
             Namedays_ListBox.GotFocus += Enable_Buttons;
             MonthsBox.GotFocus += Disable_Buttons;
@@ -127,7 +119,6 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Menu_About_Click(object sender, RoutedEventArgs e)
         {
-            // TODO make new WPF window
             var text = "Namedays\n" +
                        "Version " + _version + "\n" +
                        "Copyright (c) 2023 David Kučera\n" +
@@ -184,7 +175,7 @@ namespace Uniza.Namedays.EditorGuiApp
                 menaRegex = _calendar.GetNamedays();
             }
 
-            IEnumerable<Nameday> namesMonth = _calendar.GetNamedays(); ;
+            IEnumerable<Nameday> namesMonth = _calendar.GetNamedays();
             if (MonthsBox.SelectedIndex != 0)
             {
                 namesMonth = _calendar.GetNamedays(MonthsBox.SelectedIndex);
@@ -204,7 +195,7 @@ namespace Uniza.Namedays.EditorGuiApp
         private void Update_Count()
         {
             var count = Namedays_ListBox.Items.Count;
-            var total = _calendar.NameCount;
+            var total = _calendar.GetNamedays().Count();
             Count_Label.Content = "Count: " + count + " / " + total;
         }
 

@@ -103,7 +103,7 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Button Click="Show_On_Calendar_Click" Grid.Row="0" VerticalAlignment="Top" Margin="5" Padding="20,5">
-                                <TextBlock x:Name="Show_On_Cal_BT" TextWrapping="Wrap" TextAlignment="Center">Show on <LineBreak/> calendar</TextBlock>
+                                <TextBlock x:Name="Show_On_Cal_BT" IsEnabled="False" TextWrapping="Wrap" TextAlignment="Center">Show on <LineBreak/> calendar</TextBlock>
                             </Button>
                             <Label Name="Count_Label" Grid.Row="1" VerticalAlignment="Bottom"/>
                         </Grid>

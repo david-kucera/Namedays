@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -6,10 +7,20 @@ namespace Uniza.Namedays
 {
     public record NamedayCalendar : IEnumerable<Nameday>
     {
-        public int NameCount { get; }
-        public int DayCount { get; }
+        /// <summary>
+        /// Returns overall number of names in the calendar.
+        /// </summary>
+        public int NameCount => _name_count;
+
+        /// <summary>
+        /// Returns overall number of dates filled with names in the calendar.
+        /// </summary>
+        public int DayCount => _day_count;
 
         private List<Nameday> _calendar = new List<Nameday>();
+
+        private int _name_count;
+        private int _day_count;
 
         public DayMonth? this[string name]
         {
@@ -102,7 +113,13 @@ namespace Uniza.Namedays
         /// <param name="nameday">Nameday of celebration</param>
         public void Add(Nameday nameday)
         {
+            
             _calendar.Add(nameday);
+            _name_count++;
+            if (this[nameday.DayMonth].Length == 0)
+            {
+                _day_count++;
+            }
         }
 
         /// <summary>
@@ -113,11 +130,16 @@ namespace Uniza.Namedays
         /// <param name="names">Names of celebrators</param>
         public void Add(int day, int month, params string[] names)
         {
+            if (this[day, month].Length == 0)
+            {
+                _day_count++;
+            }
             foreach (var name in names)
             {
                 var dayMonth = new DayMonth(day, month);
                 var novy = new Nameday(name, dayMonth);
                 _calendar.Add(novy);
+                _name_count++;
             } 
         }
 
@@ -128,10 +150,15 @@ namespace Uniza.Namedays
         /// <param name="names">Names of celebrators</param>
         public void Add(DayMonth dayMonth, params string[] names)
         {
+            if (this[dayMonth].Length == 0)
+            {
+                _day_count++;
+            }
             foreach (var name in names)
             {
                 var nameday = new Nameday(name, dayMonth);
                 _calendar.Add(nameday);
+                _name_count++;
             }
         }
 
@@ -145,6 +172,11 @@ namespace Uniza.Namedays
             if (Contains(name))
             {
                 _calendar.Remove(GetEnumerator().Current);
+                _name_count--;
+                if (GetNamedays(name).ToList().Count == 0)
+                {
+                    _day_count--;
+                }
                 return true;
             }
             return false;
@@ -157,6 +189,7 @@ namespace Uniza.Namedays
         /// <returns>True, if found.</returns>
         public bool Contains(string name)
         {
+            // TODO throws random error when editing nameday
             GetEnumerator().Reset();
             while (GetEnumerator().MoveNext())
             {
@@ -209,6 +242,7 @@ namespace Uniza.Namedays
                     _calendar.Add(nameday);
                 }
             }
+            reader.Close();
         }
 
         /// <summary>
@@ -222,6 +256,7 @@ namespace Uniza.Namedays
             {
                 writer.WriteLine(line);
             }
+            writer.Close();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

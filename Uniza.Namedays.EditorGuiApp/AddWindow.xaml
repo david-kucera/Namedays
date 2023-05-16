@@ -5,22 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Uniza.Namedays.EditorGuiApp"
         mc:Ignorable="d"
-        Title="AddWindow" Height="150" Width="300" ResizeMode="NoResize">
+        Title="EditWindow" Height="150" Width="300">
     <Grid>
-        <Grid VerticalAlignment="Top" Margin="5">
+        <Grid VerticalAlignment="Top" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Name:"/>
+            <Label Grid.Column="0" Content="Name: "/>
             <TextBox Name="TextBox" Grid.Column="1"/>
         </Grid>
-        <Grid VerticalAlignment="Top" Margin="5,45,5,0">
+        <Grid VerticalAlignment="Top" Margin="16,50,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Date:" Margin="0,0,7,0"/>
+            <Label Grid.Column="0" Content="Date: "/>
             <DatePicker Name="DatePicker" Grid.Column="1"/>
         </Grid>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
