@@ -182,7 +182,7 @@ namespace Uniza.Namedays
         /// <param name="csvFile">csv file</param>
         public void Load(FileInfo csvFile)
         {
-            using var reader = new StreamReader(csvFile.FullName, Encoding.Latin1);
+            using var reader = new StreamReader(csvFile.FullName);
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();

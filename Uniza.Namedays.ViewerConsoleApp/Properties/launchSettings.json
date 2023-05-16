@@ -2,7 +2,7 @@
   "profiles": {
     "Uniza.Namedays.ViewerConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "names.csv"
+      "commandLineArgs": "namedays-sk.csv"
     }
   }
 }
