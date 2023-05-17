@@ -1,17 +1,17 @@
 ﻿namespace Uniza.Namedays
 {
     /// <summary>
-    /// Structure represents day and month
+    /// Structure represents day and month.
     /// </summary>
     public record struct DayMonth
     {
         /// <summary>
-        /// Returns day of daymonth
+        /// Returns day of daymonth.
         /// </summary>
         public int Day { get; init; } 
 
         /// <summary>
-        /// Returns month of daymonth
+        /// Returns month of daymonth.
         /// </summary>
         public int Month { get; init; }
 

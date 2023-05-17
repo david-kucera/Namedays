@@ -5,13 +5,23 @@
     /// </summary>
     public record struct Nameday
     {
+        /// <summary>
+        /// Returns name of the celebrator.
+        /// </summary>
         public string Name { get; init; }
+
+        /// <summary>
+        /// Returns daymoth of celebration.
+        /// </summary>
         public DayMonth DayMonth { get; init; }
 
         /// <summary>
         /// Non parametrized constructor.
         /// </summary>
-        public Nameday() { }
+        public Nameday()
+        {
+            Name = "";
+        }
 
         /// <summary>
         /// Parametrized constructor, sets values according to the parametres.
