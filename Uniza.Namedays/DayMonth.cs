@@ -5,7 +5,14 @@
     /// </summary>
     public record struct DayMonth
     {
-        public int Day { get; init; }
+        /// <summary>
+        /// Returns day of daymonth
+        /// </summary>
+        public int Day { get; init; } 
+
+        /// <summary>
+        /// Returns month of daymonth
+        /// </summary>
         public int Month { get; init; }
 
         /// <summary>
