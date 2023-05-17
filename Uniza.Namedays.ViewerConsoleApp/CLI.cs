@@ -100,7 +100,6 @@ namespace Uniza.Namedays.ViewerConsoleApp
 
                         Console.WriteLine("Počet mien podľa začiatočných písmen: ");
                         var pismena = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "Ľ", "M", "N", "O", "P", "R", "S", "Š", "T", "U", "V", "X", "Z", "Ž" };
-                        // TODO does not work with slovak diacritis
                         for (var i = 0; i < pismena.Length; i++)
                         {
                             var count = calendar.GetNamedays(pismena[i]);
@@ -111,9 +110,6 @@ namespace Uniza.Namedays.ViewerConsoleApp
                         for (var i = 0; i < 12; i++)
                         {
                             var count = calendar.GetNamedays(i, true);
-
-                            // TODO does not show appropriate number, probably because of encoding of csv file
-
                             if (count.Count() == 0)
                             {
                                 continue;
@@ -141,9 +137,9 @@ namespace Uniza.Namedays.ViewerConsoleApp
                                 break;
                             }
 
-                            var count = calendar.GetNamedays(input!);
+                            var count = calendar.GetNamedays(input).ToList().Count;
 
-                            if (count.Count() == 0)
+                            if (count == 0)
                             {
                                 Console.WriteLine("Neboli nájdené žiadne mená.");
                                 continue;
@@ -151,11 +147,11 @@ namespace Uniza.Namedays.ViewerConsoleApp
 
                             // TODO does not work .. does not show any names
 
-                            for (int i = 1; i <= count.Count(); i++)
+                            var names = calendar.GetNamedays(input).ToArray();
+                            for (int i = 1; i <= count; i++)
                             {
-                                var meno = count.GetEnumerator().Current;
-                                Console.Write(i + ". " + meno.Name + "(" + meno.DayMonth + ")\n");
-                                count.GetEnumerator().MoveNext();
+                                var meno = names[i-1];
+                                Console.Write(i + ". " + meno.Name + " (" + meno.DayMonth.Day + "." + meno.DayMonth.Month + ")\n");
                             }
                         }
                         continue;
