@@ -11,17 +11,17 @@ namespace Uniza.Namedays
         /// <summary>
         /// Returns overall number of names in the calendar.
         /// </summary>
-        public int NameCount => _name_count;
+        public int NameCount => _nameCount;
 
         /// <summary>
         /// Returns overall number of dates filled with names in the calendar.
         /// </summary>
-        public int DayCount => _day_count;
+        public int DayCount => _dayCount;
 
         private List<Nameday>.Enumerator _enumerator;
-        private List<Nameday> _calendar = new List<Nameday>();
-        private int _name_count;
-        private int _day_count;
+        private readonly List<Nameday> _calendar = new List<Nameday>();
+        private int _nameCount;
+        private int _dayCount;
 
         /// <summary>
         /// Indexer which returns dayMonth of input name.
@@ -151,11 +151,11 @@ namespace Uniza.Namedays
         {
             
             _calendar.Add(nameday);
-            _name_count++;
+            _nameCount++;
             // If this day has not been filled with celebration yet, increase _day_count too.
             if (this[nameday.DayMonth].Length == 0)
             {
-                _day_count++;
+                _dayCount++;
             }
         }
 
@@ -169,14 +169,14 @@ namespace Uniza.Namedays
         {
             if (this[day, month].Length == 0)
             {
-                _day_count++;
+                _dayCount++;
             }
             foreach (var name in names)
             {
                 var dayMonth = new DayMonth(day, month);
                 var newNameday = new Nameday(name, dayMonth);
                 _calendar.Add(newNameday);
-                _name_count++;
+                _nameCount++;
             } 
         }
 
@@ -189,13 +189,13 @@ namespace Uniza.Namedays
         {
             if (this[dayMonth].Length == 0)
             {
-                _day_count++;
+                _dayCount++;
             }
             foreach (var name in names)
             {
                 var nameday = new Nameday(name, dayMonth);
                 _calendar.Add(nameday);
-                _name_count++;
+                _nameCount++;
             }
         }
 
@@ -208,12 +208,12 @@ namespace Uniza.Namedays
         {
             if (Contains(name) && _calendar.Remove(_enumerator.Current))
             {
-                _name_count--;
+                _nameCount--;
                 // If that day does not contain any other name, decrement _day_count
                 var dayMonth = this[name];
                 if (dayMonth.Equals(null))
                 {
-                    _day_count--;
+                    _dayCount--;
                 }
                 return true;
             }
@@ -256,15 +256,15 @@ namespace Uniza.Namedays
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
-                var values = line.Split(';');
+                var values = line!.Split(';');
 
                 var date = values[0];
-                var date_splitted = date.Split(" ");
+                var dateSplitted = date.Split(" ");
 
-                var day_with_comma = date_splitted[0];
-                var day = day_with_comma.Substring(0,day_with_comma.Length - 1);
-                var month_with_comma = date_splitted[1];
-                var month = month_with_comma.Substring(0, month_with_comma.Length - 1);
+                var dayWithComma = dateSplitted[0];
+                var day = dayWithComma.Substring(0,dayWithComma.Length - 1);
+                var monthWithComma = dateSplitted[1];
+                var month = monthWithComma.Substring(0, monthWithComma.Length - 1);
 
                 var dayMonth = new DayMonth(int.Parse(day), int.Parse(month));
 

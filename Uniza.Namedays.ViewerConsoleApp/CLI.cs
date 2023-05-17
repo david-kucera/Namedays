@@ -137,7 +137,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                                 break;
                             }
 
-                            var count = calendar.GetNamedays(input).ToList().Count;
+                            var count = calendar.GetNamedays(input!).ToList().Count;
 
                             if (count == 0)
                             {
@@ -145,7 +145,7 @@ namespace Uniza.Namedays.ViewerConsoleApp
                                 continue;
                             }
 
-                            var names = calendar.GetNamedays(input).ToArray();
+                            var names = calendar.GetNamedays(input!).ToArray();
                             for (int i = 1; i <= count; i++)
                             {
                                 var meno = names[i-1];

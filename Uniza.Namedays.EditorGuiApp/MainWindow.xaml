@@ -94,8 +94,8 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Button Grid.Row="0" Click="Add_Date_Click" Content="Add..." Margin="5" Padding="5"/>
-                            <Button x:Name="Edit_BT" Grid.Row="1" Click="Edit_Date_Click" Content="Edit..." Margin="5" Padding="5"/>
-                            <Button x:Name="Remove_BT" Grid.Row="2" Click="Remove_Date_Click" Content="Remove" Margin="5" Padding="5"/>
+                            <Button x:Name="EditBt" Grid.Row="1" Click="Edit_Date_Click" Content="Edit..." Margin="5" Padding="5"/>
+                            <Button x:Name="RemoveBt" Grid.Row="2" Click="Remove_Date_Click" Content="Remove" Margin="5" Padding="5"/>
                         </Grid>
                         <Grid HorizontalAlignment="Right" VerticalAlignment="Bottom">
                             <Grid.RowDefinitions>

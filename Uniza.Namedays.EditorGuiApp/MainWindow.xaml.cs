@@ -265,8 +265,8 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Disable_Buttons()
         {
-            Edit_BT.IsEnabled = false;
-            Remove_BT.IsEnabled = false;
+            EditBt.IsEnabled = false;
+            RemoveBt.IsEnabled = false;
             ShowOnCalBt.IsEnabled = false;
         }
 
@@ -277,8 +277,8 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Enable_Buttons(object sender, EventArgs e)
         {
-            Edit_BT.IsEnabled = true;
-            Remove_BT.IsEnabled = true;
+            EditBt.IsEnabled = true;
+            RemoveBt.IsEnabled = true;
             ShowOnCalBt.IsEnabled = true;
         }
 
