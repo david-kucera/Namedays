@@ -103,20 +103,21 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Menu_SaveAs_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog = new();
-            saveFileDialog.Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
-            if (saveFileDialog.ShowDialog() == false)
+            var saveFileDialog = new SaveFileDialog
             {
-                if (saveFileDialog.FileName.Any())
-                {
-                    FileInfo fi = new(saveFileDialog.FileName);
-                    _calendar.Write(fi);
-                }
-                else
-                {
-                    MessageBox.Show("No file was chosen!", "No output file", MessageBoxButton.OKCancel,
-                        MessageBoxImage.Error, MessageBoxResult.OK);
-                }
+                Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*"
+            };
+            saveFileDialog.ShowDialog();
+
+            if (saveFileDialog.FileName.Any())
+            {
+                FileInfo fi = new(saveFileDialog.FileName);
+                _calendar.Write(fi);
+            }
+            else
+            {
+                MessageBox.Show("No file was chosen!", "No output file", MessageBoxButton.OKCancel,
+                    MessageBoxImage.Error, MessageBoxResult.OK);
             }
         }
 
@@ -258,6 +259,10 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Show_On_Calendar_Click(object sender, RoutedEventArgs e)
         {
+            //if (!Namedays_ListBox.IsFocused)
+            //{
+            //    return;
+            //}
             var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
             CalendarG.SelectedDate = selectedItem.DayMonth.ToDateTime();
             CalendarG.DisplayDate = selectedItem.DayMonth.ToDateTime();

@@ -285,16 +285,39 @@ namespace Uniza.Namedays
         /// <summary>
         /// Method saves data from calendar to csv file.
         /// </summary>
-        /// <param name="csvFile">CSV file</param>
+        /// <param name="csvFile">CSV file to be written to.</param>
         public void Write(FileInfo csvFile)
         {
-            // TODO implement write to file
-            using var writer = new StreamWriter(csvFile.FullName);
-            foreach (var line in _calendar.Select(nameday => new string[] { nameday.DayMonth.ToString(), nameday.Name }).Select(data => string.Join(";", data)))
+            var file = csvFile.Open(FileMode.Open);
+            file.SetLength(0);
+            var writer = new StreamWriter(file);
+            var countOfNames = 0;
+
+            foreach (var nameday in _calendar)
             {
-                writer.WriteLine(line);
+                if (countOfNames == 0)
+                {
+                    writer.Write(nameday.DayMonth.Day + "." + nameday.DayMonth.Month + ".;" + string.Join(";", this[nameday.DayMonth]));
+
+                    // If no other names are on that date
+                    if (this[nameday.DayMonth].Length == 0) writer.Write("-;;");
+                    else
+                    {
+                        for (int i = 0; i < (3 - this[nameday.DayMonth].Length); i++)
+                        {
+                            writer.Write(";");
+                        }
+                        countOfNames = this[nameday.DayMonth].Length - 1;
+                    }
+                    writer.WriteLine();
+                }
+                else
+                {
+                    countOfNames--;
+                }
             }
             writer.Close();
+            file.Close();
         }
     }
 }
