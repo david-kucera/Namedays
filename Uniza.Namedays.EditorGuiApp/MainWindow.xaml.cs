@@ -247,8 +247,8 @@ namespace Uniza.Namedays.EditorGuiApp
         private void Remove_Date_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
-            var removeMB = MessageBox.Show("Do you really want to remove selected nameday(" + selectedItem.Name + ")?", "Remove nameday", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (removeMB == MessageBoxResult.Yes)
+            var removeMb = MessageBox.Show("Do you really want to remove selected nameday(" + selectedItem.Name + ")?", "Remove nameday", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (removeMb == MessageBoxResult.Yes)
             {
                 _calendar.Remove(selectedItem.Name);
             }

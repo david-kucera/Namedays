@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -17,41 +18,67 @@ namespace Uniza.Namedays
         /// </summary>
         public int DayCount => _day_count;
 
+        private List<Nameday>.Enumerator _enumerator;
         private List<Nameday> _calendar = new List<Nameday>();
-
         private int _name_count;
         private int _day_count;
 
+        /// <summary>
+        /// Indexer which returns dayMonth of input name.
+        /// </summary>
+        /// <param name="name">Name of celebrator.</param>
+        /// <returns>DayMonth of his celebration.</returns>
         public DayMonth? this[string name]
         {
             get
             {
                 if (Contains(name))
                 {
-                    return GetEnumerator().Current.DayMonth;
+                    return _enumerator.Current.DayMonth;
                 }
                 return null;
             }
         }
 
+        /// <summary>
+        /// Indexer returns string array of names that celebrate on given daymonth.
+        /// </summary>
+        /// <param name="dayMonth">DayMonth of wanted given celebrators.</param>
+        /// <returns>String array with that day celebrators.</returns>
         public string[] this[DayMonth dayMonth] => 
             (from meno in _calendar 
                 where meno.DayMonth.Day == dayMonth.Day 
                     && meno.DayMonth.Month == dayMonth.Month 
                         select meno.Name).ToArray();
 
+        /// <summary>
+        /// Indexer returns string array of names that celebrate on given DateOnly.
+        /// </summary>
+        /// <param name="date">DateOnly with wanted date of celebration.</param>
+        /// <returns>String array of that day celebrators.</returns>
         public string[] this[DateOnly date] =>
             (from meno in _calendar
                 where meno.DayMonth.Day == date.Day
                       && meno.DayMonth.Month == date.Month
                             select meno.Name).ToArray();
 
+        /// <summary>
+        /// Indexer returns string array of names that celebrate on given DateTime.
+        /// </summary>
+        /// <param name="date">DateTime with wanted date of celebration.</param>
+        /// <returns>String array of that day celebrators.</returns>
         public string[] this[DateTime date] =>
         (from meno in _calendar 
             where meno.DayMonth.Day == date.Day
               && meno.DayMonth.Month == date.Month
                 select meno.Name).ToArray();
 
+        /// <summary>
+        /// Indexer returns string array of names that celebrate on given day and month.
+        /// </summary>
+        /// <param name="day">Integer day of celebration.</param>
+        /// <param name="month">Integer month of celebration.</param>
+        /// <returns>String array of that day celebrators.</returns>
         public string[] this[int day, int month] =>
             (from meno in _calendar 
                 where meno.DayMonth.Day == day
@@ -59,9 +86,9 @@ namespace Uniza.Namedays
                         select meno.Name).ToArray();
     
         /// <summary>
-        /// Method returns enumerator.
+        /// Method returns all celebrations in the calendar.
         /// </summary>
-        /// <returns>Enumerator</returns>
+        /// <returns>All namedays that are in the calendar.</returns>
         public IEnumerator<Nameday> GetEnumerator()
         {
             return _calendar.GetEnumerator();
@@ -70,7 +97,16 @@ namespace Uniza.Namedays
         /// <summary>
         /// Method returns all namedays in calendar.
         /// </summary>
-        /// <returns>All Namedays in calendar</returns>
+        /// <returns>All Namedays in calendar.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        /// <summary>
+        /// Returns all namedays in calendar.
+        /// </summary>
+        /// <returns>Returns all namedays in the calendar.</returns>
         public IEnumerable<Nameday> GetNamedays()
         {
             return _calendar;
@@ -79,8 +115,8 @@ namespace Uniza.Namedays
         /// <summary>
         /// Method returns namedays which name length equals the parameter numberOfChars.
         /// </summary>
-        /// <param name="numberOfChars">Number of characters</param>
-        /// <param name="boo">Just another param, to diffrenciate from other method</param>
+        /// <param name="numberOfChars">Number of characters.</param>
+        /// <param name="boo">Just another param, to diffrenciate from other method.</param>
         /// <returns></returns>
         public IEnumerable<Nameday> GetNamedays(int numberOfChars, bool boo)
         {
@@ -90,8 +126,8 @@ namespace Uniza.Namedays
         /// <summary>
         /// Method returns all namedays in that month.
         /// </summary>
-        /// <param name="month"></param>
-        /// <returns>All namedays in that month</returns>
+        /// <param name="month">Integer of month of celebration.</param>
+        /// <returns>All namedays in that month.</returns>
         public IEnumerable<Nameday> GetNamedays(int month)
         {
             return from nameday in _calendar where nameday.DayMonth.Month == month select nameday;
@@ -110,12 +146,13 @@ namespace Uniza.Namedays
         /// <summary>
         /// Method adds nameday to calendar.
         /// </summary>
-        /// <param name="nameday">Nameday of celebration</param>
+        /// <param name="nameday">Nameday of celebration.</param>
         public void Add(Nameday nameday)
         {
             
             _calendar.Add(nameday);
             _name_count++;
+            // If this day has not been filled with celebration yet, increase _day_count too.
             if (this[nameday.DayMonth].Length == 0)
             {
                 _day_count++;
@@ -125,9 +162,9 @@ namespace Uniza.Namedays
         /// <summary>
         /// Method adds one, or more names with given day and month to calendar.
         /// </summary>
-        /// <param name="day">Day of celebration</param>
-        /// <param name="month">Month of celebration</param>
-        /// <param name="names">Names of celebrators</param>
+        /// <param name="day">Day of celebration.</param>
+        /// <param name="month">Month of celebration.</param>
+        /// <param name="names">Names of celebrators.</param>
         public void Add(int day, int month, params string[] names)
         {
             if (this[day, month].Length == 0)
@@ -137,8 +174,8 @@ namespace Uniza.Namedays
             foreach (var name in names)
             {
                 var dayMonth = new DayMonth(day, month);
-                var novy = new Nameday(name, dayMonth);
-                _calendar.Add(novy);
+                var newNameday = new Nameday(name, dayMonth);
+                _calendar.Add(newNameday);
                 _name_count++;
             } 
         }
@@ -146,8 +183,8 @@ namespace Uniza.Namedays
         /// <summary>
         /// Method adds one or more names with given day and month to calendar.
         /// </summary>
-        /// <param name="dayMonth">Day of celebration</param>
-        /// <param name="names">Names of celebrators</param>
+        /// <param name="dayMonth">Day of celebration.</param>
+        /// <param name="names">Names of celebrators.</param>
         public void Add(DayMonth dayMonth, params string[] names)
         {
             if (this[dayMonth].Length == 0)
@@ -165,15 +202,16 @@ namespace Uniza.Namedays
         /// <summary>
         /// Method removes given name from calendar, if found - returns true. If not found, returns false.
         /// </summary>
-        /// <param name="name">Name to be removed</param>
-        /// <returns>True, if successfully removed</returns>
+        /// <param name="name">Name to be removed.</param>
+        /// <returns>True, if successfully removed.</returns>
         public bool Remove(string name)
         {
-            if (Contains(name))
+            if (Contains(name) && _calendar.Remove(_enumerator.Current))
             {
-                _calendar.Remove(GetEnumerator().Current);
                 _name_count--;
-                if (GetNamedays(name).ToList().Count == 0)
+                // If that day does not contain any other name, decrement _day_count
+                var dayMonth = this[name];
+                if (dayMonth.Equals(null))
                 {
                     _day_count--;
                 }
@@ -185,12 +223,11 @@ namespace Uniza.Namedays
         /// <summary>
         /// Method returns true, if given name is already in the calendar. If it does not, returns false.
         /// </summary>
-        /// <param name="name">Name to be found</param>
+        /// <param name="name">Name to be found in the calendar.</param>
         /// <returns>True, if found.</returns>
         public bool Contains(string name)
         {
-            // TODO throws random error when editing nameday
-            GetEnumerator().Reset();
+            _enumerator = (List<Nameday>.Enumerator)GetEnumerator();
             while (GetEnumerator().MoveNext())
             {
                 if (GetEnumerator().Current.Name.Equals(name))
@@ -251,17 +288,13 @@ namespace Uniza.Namedays
         /// <param name="csvFile">CSV file</param>
         public void Write(FileInfo csvFile)
         {
+            // TODO implement this
             using var writer = new StreamWriter(csvFile.FullName);
             foreach (var line in _calendar.Select(nameday => new string[] { nameday.DayMonth.ToString(), nameday.Name }).Select(data => string.Join(";", data)))
             {
                 writer.WriteLine(line);
             }
             writer.Close();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }
