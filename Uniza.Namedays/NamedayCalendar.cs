@@ -228,9 +228,9 @@ namespace Uniza.Namedays
         public bool Contains(string name)
         {
             _enumerator = (List<Nameday>.Enumerator)GetEnumerator();
-            while (GetEnumerator().MoveNext())
+            while (_enumerator.MoveNext())
             {
-                if (GetEnumerator().Current.Name.Equals(name))
+                if (_enumerator.Current.Name.Equals(name))
                 {
                     return true;
                 }

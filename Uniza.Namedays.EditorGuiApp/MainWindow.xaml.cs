@@ -85,6 +85,8 @@ namespace Uniza.Namedays.EditorGuiApp
                 {
                     FileInfo fi = new(fileDialog.FileName);
                     _calendar.Load(fi);
+                    Namedays_ListBox.Items.Clear();
+                    Update_Count();
                 }
                 else
                 {
@@ -163,6 +165,7 @@ namespace Uniza.Namedays.EditorGuiApp
             RegexFilterBox.Text = "";
             MonthsBox.SelectedIndex = 0;
             Disable_Buttons(sender, e);
+            Update_Count();
         }
 
         private void FilterChanged(object? sender, EventArgs e)
@@ -215,22 +218,13 @@ namespace Uniza.Namedays.EditorGuiApp
             }
 
             Update_Count();
+            FilterChanged(sender, e);
         }
 
         private void Edit_Date_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
-            var editWindow = new EditWindow 
-            {
-                DatePicker = 
-                {
-                    SelectedDate = selectedItem.DayMonth.ToDateTime()
-                },
-                TextBox = 
-                {
-                    Text = selectedItem.Name
-                }
-            };
+            var editWindow = new EditWindow(selectedItem.DayMonth.ToDateTime(), selectedItem.Name);
             editWindow.Show();
 
             if (editWindow.DatePicker.SelectedDate != null)
@@ -248,7 +242,6 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Remove_Date_Click(object sender, RoutedEventArgs e)
         {
-            // TODO when smth is removed, crashes the app
             var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
             var removeMb = MessageBox.Show("Do you really want to remove selected nameday(" + selectedItem.Name + ")?", "Remove nameday", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (removeMb == MessageBoxResult.Yes)

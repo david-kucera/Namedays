@@ -19,9 +19,11 @@ namespace Uniza.Namedays.EditorGuiApp
     /// </summary>
     public partial class EditWindow : Window
     {
-        public EditWindow()
+        public EditWindow(DateTime date, string selectedItemName)
         {
             InitializeComponent();
+            TextBox.Name = selectedItemName;
+            DatePicker.SelectedDate = date;
         }
 
         private void Close(object sender, RoutedEventArgs e)
