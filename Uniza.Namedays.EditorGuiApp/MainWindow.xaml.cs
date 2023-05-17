@@ -15,8 +15,8 @@ namespace Uniza.Namedays.EditorGuiApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private NamedayCalendar _calendar;
-        private const double _version = 1.0;
+        private readonly NamedayCalendar _calendar;
+        private const string Version = "1.0";
 
         public MainWindow()
         {
@@ -45,7 +45,7 @@ namespace Uniza.Namedays.EditorGuiApp
             MonthsBox.SelectionChanged += FilterChanged;
             RegexFilterBox.PreviewKeyUp += FilterChanged;
 
-            Disable_Buttons(null, null);
+            Disable_Buttons();
             Show_On_Cal_BT.IsEnabled = false;
 
             Namedays_ListBox.GotFocus += Enable_Buttons;
@@ -63,6 +63,8 @@ namespace Uniza.Namedays.EditorGuiApp
                 if (option == MessageBoxResult.Yes)
                 {
                     _calendar.Clear();
+                    Namedays_ListBox.Items.Clear();
+                    Update_Count();
                 }
             }
             else
@@ -120,7 +122,7 @@ namespace Uniza.Namedays.EditorGuiApp
         private void Menu_About_Click(object sender, RoutedEventArgs e)
         {
             var text = "Namedays\n" +
-                       "Version " + _version + "\n" +
+                       "Version " + Version + "\n" +
                        "Copyright (c) 2023 David Kučera\n" +
                        "\n" +
                        "This is an app for editing and viewing namedays.";
@@ -241,11 +243,12 @@ namespace Uniza.Namedays.EditorGuiApp
                 _calendar.Add(dayMonth, name);
             }
             FilterChanged(sender, e);
-            Disable_Buttons(sender, e);
+            Disable_Buttons();
         }
 
         private void Remove_Date_Click(object sender, RoutedEventArgs e)
         {
+            // TODO when smth is removed, crashes the app
             var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
             var removeMb = MessageBox.Show("Do you really want to remove selected nameday(" + selectedItem.Name + ")?", "Remove nameday", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (removeMb == MessageBoxResult.Yes)
@@ -253,7 +256,7 @@ namespace Uniza.Namedays.EditorGuiApp
                 _calendar.Remove(selectedItem.Name);
             }
             FilterChanged(sender, e);
-            Disable_Buttons(sender, e);
+            Disable_Buttons();
         }
 
         private void Show_On_Calendar_Click(object sender, RoutedEventArgs e)
@@ -263,11 +266,16 @@ namespace Uniza.Namedays.EditorGuiApp
             CalendarG.DisplayDate = selectedItem.DayMonth.ToDateTime();
         }
 
-        private void Disable_Buttons(object sender, EventArgs e)
+        private void Disable_Buttons()
         {
             Edit_BT.IsEnabled = false;
             Remove_BT.IsEnabled = false;
             Show_On_Cal_BT.IsEnabled = false;
+        }
+
+        private void Disable_Buttons(object sender, RoutedEventArgs e)
+        {
+            Disable_Buttons();
         }
 
         private void Enable_Buttons(object sender, EventArgs e)

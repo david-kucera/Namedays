@@ -145,8 +145,6 @@ namespace Uniza.Namedays.ViewerConsoleApp
                                 continue;
                             }
 
-                            // TODO does not work .. does not show any names
-
                             var names = calendar.GetNamedays(input).ToArray();
                             for (int i = 1; i <= count; i++)
                             {

@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace Uniza.Namedays.EditorGuiApp
 {
     /// <summary>
-    /// Interaction logic for AddWindow.xaml
+    /// Window used to add new nameday to the calendar.
     /// </summary>
     public partial class AddWindow : Window
     {
