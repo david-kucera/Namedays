@@ -288,7 +288,7 @@ namespace Uniza.Namedays
         /// <param name="csvFile">CSV file</param>
         public void Write(FileInfo csvFile)
         {
-            // TODO implement this
+            // TODO implement write to file
             using var writer = new StreamWriter(csvFile.FullName);
             foreach (var line in _calendar.Select(nameday => new string[] { nameday.DayMonth.ToString(), nameday.Name }).Select(data => string.Join(";", data)))
             {

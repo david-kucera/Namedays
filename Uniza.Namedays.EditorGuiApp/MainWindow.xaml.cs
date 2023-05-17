@@ -11,7 +11,7 @@ using Microsoft.Win32;
 namespace Uniza.Namedays.EditorGuiApp
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Main window of the app.
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -45,10 +45,14 @@ namespace Uniza.Namedays.EditorGuiApp
             MonthsBox.SelectionChanged += FilterChanged;
             RegexFilterBox.PreviewKeyUp += FilterChanged;
 
+            // initially disable all manipulation buttons
             Disable_Buttons();
-            Show_On_Cal_BT.IsEnabled = false;
+            ShowOnCalBt.IsEnabled = false; // TODO does not disable the button any way...
 
-            Namedays_ListBox.GotFocus += Enable_Buttons;
+            // when nameday is chosen, enable buttons
+            Namedays_ListBox.GotMouseCapture += Enable_Buttons;
+
+            // when focus on combo box or filter box, disable buttons
             MonthsBox.GotFocus += Disable_Buttons;
             RegexFilterBox.GotFocus += Disable_Buttons;
 
@@ -243,7 +247,7 @@ namespace Uniza.Namedays.EditorGuiApp
         private void Remove_Date_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
-            var removeMb = MessageBox.Show("Do you really want to remove selected nameday(" + selectedItem.Name + ")?", "Remove nameday", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var removeMb = MessageBox.Show("Do you really want to remove selected nameday (" + selectedItem.Name + ")?", "Remove nameday", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (removeMb == MessageBoxResult.Yes)
             {
                 _calendar.Remove(selectedItem.Name);
@@ -263,7 +267,7 @@ namespace Uniza.Namedays.EditorGuiApp
         {
             Edit_BT.IsEnabled = false;
             Remove_BT.IsEnabled = false;
-            Show_On_Cal_BT.IsEnabled = false;
+            ShowOnCalBt.IsEnabled = false;
         }
 
         private void Disable_Buttons(object sender, RoutedEventArgs e)
@@ -275,7 +279,7 @@ namespace Uniza.Namedays.EditorGuiApp
         {
             Edit_BT.IsEnabled = true;
             Remove_BT.IsEnabled = true;
-            Show_On_Cal_BT.IsEnabled = true;
+            ShowOnCalBt.IsEnabled = true;
         }
 
     }
