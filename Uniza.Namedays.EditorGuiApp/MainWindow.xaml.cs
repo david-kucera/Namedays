@@ -48,7 +48,7 @@ namespace Uniza.Namedays.EditorGuiApp
 
             // initially disable all manipulation buttons
             Disable_Buttons();
-            ShowOnCalBt.IsEnabled = false; // TODO does not disable the button any way...
+            ShowOnCalBt.IsEnabled = false; // TODO does not disable the button any way...???
 
             // when nameday is chosen, enable buttons
             NamedaysListBox.GotMouseCapture += Enable_Buttons;

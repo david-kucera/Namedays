@@ -152,7 +152,7 @@ namespace Uniza.Namedays
             
             _calendar.Add(nameday);
             _nameCount++;
-            // If this day has not been filled with celebration yet, increase _day_count too.
+            // If this day has not been filled with celebration yet, increase _dayCount too.
             if (this[nameday.DayMonth].Length == 0)
             {
                 _dayCount++;
@@ -277,7 +277,10 @@ namespace Uniza.Namedays
                     }
                     var nameday = new Nameday(values[i], dayMonth);
                     _calendar.Add(nameday);
+                    _nameCount++;
                 }
+
+                _dayCount++;
             }
             reader.Close();
         }
