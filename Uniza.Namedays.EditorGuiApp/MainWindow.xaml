@@ -10,7 +10,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Menu MaxHeight="20" VerticalAlignment="Top" Grid.ColumnSpan="2">
+        <Menu Grid.Column="0" MaxHeight="20" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <MenuItem Header="File">
                 <MenuItem Header="New" Click="Menu_New_Click"/>
                 <MenuItem Header="Open..." Click="Menu_Open_Click"/>
@@ -52,7 +52,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="3*"/>
                             </Grid.ColumnDefinitions>
@@ -69,7 +69,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <ListBox Name="Namedays_ListBox" Grid.Column="0" Margin="7,7,5,7">
+                    <ListBox Name="NamedaysListBox" Grid.Column="0" Margin="7,7,5,7">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
@@ -105,7 +105,7 @@
                             <Button Click="Show_On_Calendar_Click" Grid.Row="0" VerticalAlignment="Top" Margin="5" Padding="20,5">
                                 <TextBlock Name="ShowOnCalBt" IsEnabled="False" TextWrapping="Wrap" TextAlignment="Center">Show on <LineBreak/> calendar</TextBlock>
                             </Button>
-                            <Label Name="Count_Label" Grid.Row="1" VerticalAlignment="Bottom"/>
+                            <Label Name="CountLabel" Grid.Row="1" VerticalAlignment="Bottom"/>
                         </Grid>
                     </Grid>
                 </Grid>

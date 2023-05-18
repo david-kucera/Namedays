@@ -41,7 +41,7 @@ namespace Uniza.Namedays.EditorGuiApp
                 MonthsBox.Items.Add(dateFormat.GetMonthName(i));
             }
 
-            Count_Label.Content = "Count 0 / 0";
+            CountLabel.Content = "Count 0 / 0";
 
             MonthsBox.SelectionChanged += FilterChanged;
             RegexFilterBox.PreviewKeyUp += FilterChanged;
@@ -51,7 +51,7 @@ namespace Uniza.Namedays.EditorGuiApp
             ShowOnCalBt.IsEnabled = false; // TODO does not disable the button any way...
 
             // when nameday is chosen, enable buttons
-            Namedays_ListBox.GotMouseCapture += Enable_Buttons;
+            NamedaysListBox.GotMouseCapture += Enable_Buttons;
 
             // when focus on combo box or filter box, disable buttons
             MonthsBox.GotFocus += Disable_Buttons;
@@ -67,7 +67,7 @@ namespace Uniza.Namedays.EditorGuiApp
                     MessageBoxImage.Question, MessageBoxResult.No);
                 if (option != MessageBoxResult.Yes) return;
                 _calendar.Clear();
-                Namedays_ListBox.Items.Clear();
+                NamedaysListBox.Items.Clear();
                 Update_Count();
             }
             else
@@ -89,7 +89,7 @@ namespace Uniza.Namedays.EditorGuiApp
             {
                 FileInfo fi = new(fileDialog.FileName);
                 _calendar.Load(fi);
-                Namedays_ListBox.Items.Clear();
+                NamedaysListBox.Items.Clear();
                 Update_Count();
             }
             else
@@ -190,10 +190,10 @@ namespace Uniza.Namedays.EditorGuiApp
 
             var intersect = namesMonth.Intersect(menaRegex);
 
-            Namedays_ListBox.Items.Clear();
+            NamedaysListBox.Items.Clear();
             foreach (var nameday in intersect)
             {
-                Namedays_ListBox.Items.Add(nameday);
+                NamedaysListBox.Items.Add(nameday);
             }
 
             Update_Count();
@@ -201,9 +201,9 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Update_Count()
         {
-            var count = Namedays_ListBox.Items.Count;
+            var count = NamedaysListBox.Items.Count;
             var total = _calendar.GetNamedays().Count();
-            Count_Label.Content = "Count: " + count + " / " + total;
+            CountLabel.Content = "Count: " + count + " / " + total;
         }
 
         private void Add_Date_Click(object sender, RoutedEventArgs e)
@@ -225,7 +225,7 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Edit_Date_Click(object sender, RoutedEventArgs e)
         {
-            var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
+            var selectedItem = (Nameday)NamedaysListBox.SelectedItem;
             var editWindow = new EditWindow(selectedItem.DayMonth.ToDateTime(), selectedItem.Name);
             editWindow.Show();
 
@@ -244,7 +244,7 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Remove_Date_Click(object sender, RoutedEventArgs e)
         {
-            var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
+            var selectedItem = (Nameday)NamedaysListBox.SelectedItem;
             var removeMb = MessageBox.Show("Do you really want to remove selected nameday (" + selectedItem.Name + ")?", "Remove nameday", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (removeMb == MessageBoxResult.Yes)
             {
@@ -256,7 +256,7 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Show_On_Calendar_Click(object sender, RoutedEventArgs e)
         {
-            var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
+            var selectedItem = (Nameday)NamedaysListBox.SelectedItem;
             CalendarG.SelectedDate = selectedItem.DayMonth.ToDateTime();
             CalendarG.DisplayDate = selectedItem.DayMonth.ToDateTime();
         }
