@@ -145,6 +145,7 @@ namespace Uniza.Namedays.EditorGuiApp
             {
                 Celebrators.Items.Add(name);
             }
+            Mouse.Capture(null);
         }
 
         private void Today_Click(object sender, RoutedEventArgs e)
@@ -255,11 +256,6 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Show_On_Calendar_Click(object sender, RoutedEventArgs e)
         {
-            // TODO still shows button even though should be disabled ... 
-            //if (!Namedays_ListBox.IsFocused)
-            //{
-            //    return;
-            //}
             var selectedItem = (Nameday)Namedays_ListBox.SelectedItem;
             CalendarG.SelectedDate = selectedItem.DayMonth.ToDateTime();
             CalendarG.DisplayDate = selectedItem.DayMonth.ToDateTime();

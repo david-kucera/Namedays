@@ -288,7 +288,7 @@ namespace Uniza.Namedays
         /// <param name="csvFile">CSV file to be written to.</param>
         public void Write(FileInfo csvFile)
         {
-            var file = csvFile.Open(FileMode.Open);
+            using var file = csvFile.Open(FileMode.Open);
             file.SetLength(0);
             var writer = new StreamWriter(file);
             var countOfNames = 0;
