@@ -303,7 +303,8 @@ namespace Uniza.Namedays
                     if (this[nameday.DayMonth].Length == 0) writer.Write("-;;");
                     else
                     {
-                        for (int i = 0; i < (3 - this[nameday.DayMonth].Length); i++)
+                        // Write redundant ;
+                        for (var i = 0; i < (3 - this[nameday.DayMonth].Length); i++)
                         {
                             writer.Write(";");
                         }

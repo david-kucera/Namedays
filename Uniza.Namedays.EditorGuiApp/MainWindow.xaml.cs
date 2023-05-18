@@ -21,7 +21,7 @@ namespace Uniza.Namedays.EditorGuiApp
         public MainWindow()
         {
             _calendar = new NamedayCalendar();
-            FileInfo fi = new FileInfo("namedays-sk.csv");
+            var fi = new FileInfo("namedays-sk.csv");
             _calendar.Load(fi);
             InitializeComponent();
 
@@ -33,9 +33,10 @@ namespace Uniza.Namedays.EditorGuiApp
                 Celebrators.Items.Add(name);
             }
 
-            DateTimeFormatInfo dateFormat = new DateTimeFormatInfo();
+            var dateFormat = new DateTimeFormatInfo();
+            dateFormat = new CultureInfo("sk-SK").DateTimeFormat;
             MonthsBox.Items.Add("");
-            for (int i = 1; i <= 12; i++)
+            for (var i = 1; i <= 12; i++)
             {
                 MonthsBox.Items.Add(dateFormat.GetMonthName(i));
             }
@@ -64,12 +65,10 @@ namespace Uniza.Namedays.EditorGuiApp
             {
                 var option = MessageBox.Show("Do you wish to clear the calendar?", "Clear calendar", MessageBoxButton.YesNoCancel,
                     MessageBoxImage.Question, MessageBoxResult.No);
-                if (option == MessageBoxResult.Yes)
-                {
-                    _calendar.Clear();
-                    Namedays_ListBox.Items.Clear();
-                    Update_Count();
-                }
+                if (option != MessageBoxResult.Yes) return;
+                _calendar.Clear();
+                Namedays_ListBox.Items.Clear();
+                Update_Count();
             }
             else
             {
@@ -80,24 +79,23 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Menu_Open_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog fileDialog = new();
-            fileDialog.Multiselect = false;
-            fileDialog.Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
-            if (fileDialog.ShowDialog() == false)
+            OpenFileDialog fileDialog = new()
             {
-                if (fileDialog.FileName.Any())
-                {
-                    FileInfo fi = new(fileDialog.FileName);
-                    _calendar.Load(fi);
-                    Namedays_ListBox.Items.Clear();
-                    Update_Count();
-                }
-                else
-                {
-                    MessageBox.Show("No file was chosen!", "No input file", MessageBoxButton.OKCancel,
-                        MessageBoxImage.Error, MessageBoxResult.OK);
-                }
-                
+                Multiselect = false,
+                Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*"
+            };
+            fileDialog.ShowDialog();
+            if (fileDialog.FileName.Any())
+            {
+                FileInfo fi = new(fileDialog.FileName);
+                _calendar.Load(fi);
+                Namedays_ListBox.Items.Clear();
+                Update_Count();
+            }
+            else
+            {
+                MessageBox.Show("No file was chosen!", "No input file", MessageBoxButton.OKCancel,
+                    MessageBoxImage.Error, MessageBoxResult.OK);
             }
         }
 
@@ -128,32 +126,30 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Menu_About_Click(object sender, RoutedEventArgs e)
         {
-            var text = "Namedays\n" +
-                       "Version " + Version + "\n" +
-                       "Copyright (c) 2023 David Kučera\n" +
-                       "\n" +
-                       "This is an app for editing and viewing namedays.";
+            const string text = "Namedays\n" +
+                                "Version " + Version + "\n" +
+                                "Copyright (c) 2023 David Kučera\n" +
+                                "\n" +
+                                "This is an app for editing and viewing namedays.";
             MessageBox.Show(text, "About application", MessageBoxButton.OK);
         }
 
         private void Calendar_Changed(object? sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
-            if (CalendarG.SelectedDate.HasValue)
+            if (!CalendarG.SelectedDate.HasValue) return;
+            var date = CalendarG.SelectedDate.Value;
+            Celebrators.Items.Clear();
+            Celebrates.Content = date.ToString("dd.MM.yyyy") + " celebrates:";
+            var celebrs = _calendar[date];
+            foreach (var name in celebrs)
             {
-                DateTime date = CalendarG.SelectedDate.Value;
-                Celebrators.Items.Clear();
-                Celebrates.Content = date.ToString("dd.MM.yyyy") + " celebrates:";
-                var celebrs = _calendar[date];
-                foreach (var name in celebrs)
-                {
-                    Celebrators.Items.Add(name);
-                }
+                Celebrators.Items.Add(name);
             }
         }
 
         private void Today_Click(object sender, RoutedEventArgs e)
         {
-            DateTime date = DateTime.Now.Date;
+            var date = DateTime.Now.Date;
             CalendarG.DisplayDate = date;
             CalendarG.SelectedDate = date;
             Celebrators.Items.Clear();
@@ -185,7 +181,7 @@ namespace Uniza.Namedays.EditorGuiApp
                 menaRegex = _calendar.GetNamedays();
             }
 
-            IEnumerable<Nameday> namesMonth = _calendar.GetNamedays();
+            var namesMonth = _calendar.GetNamedays();
             if (MonthsBox.SelectedIndex != 0)
             {
                 namesMonth = _calendar.GetNamedays(MonthsBox.SelectedIndex);
@@ -259,6 +255,7 @@ namespace Uniza.Namedays.EditorGuiApp
 
         private void Show_On_Calendar_Click(object sender, RoutedEventArgs e)
         {
+            // TODO still shows button even though should be disabled ... 
             //if (!Namedays_ListBox.IsFocused)
             //{
             //    return;
